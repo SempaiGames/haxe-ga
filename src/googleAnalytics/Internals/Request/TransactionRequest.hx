@@ -24,19 +24,19 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Transaction;
+import googleAnalytics.Transaction;
 
-import GoogleAnalytics.Internals.ParameterHolder;
+import googleAnalytics.internals.ParameterHolder;
 
 
 class TransactionRequest extends Request {
 	
 	/**
-	 * @var GoogleAnalytics.Transaction
+	 * @var googleAnalytics.Transaction
 	 */
-	private var transaction : GoogleAnalytics;
+	private var transaction : googleAnalytics;
 	
 	
 	/**
@@ -47,9 +47,9 @@ class TransactionRequest extends Request {
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/ecommerce/Transaction.as#76
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = super.buildParameters();
 		
 		p.utmtid = this.transaction.getOrderId();
@@ -67,34 +67,34 @@ class TransactionRequest extends Request {
 	/**
 	 * The GA Javascript client doesn't send any visitor information for
 	 * e-commerce requests, so we don't either.
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildVisitorParameters(p:ParameterHolder) : GoogleAnalytics {
+	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
 		return p;
 	}
 	
 	/**
 	 * The GA Javascript client doesn't send any custom variables for
 	 * e-commerce requests, so we don't either.
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : GoogleAnalytics {
+	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
 		return p;
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Transaction
+	 * @return googleAnalytics.Transaction
 	 */
-	public function getTransaction() : GoogleAnalytics {
+	function getTransaction() : googleAnalytics {
 		return this.transaction;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Transaction $transaction
+	 * @param googleAnalytics.Transaction $transaction
 	 */
-	public function setTransaction(transaction:Transaction) {
+	function setTransaction(transaction:Transaction) {
 		this.transaction = transaction;
 	}
 	

@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 /**
  * @link http://code.google.com/apis/analytics/docs/tracking/eventTrackerOverview.html
@@ -64,7 +64,7 @@ class Event {
 	
 	/**
 	 */
-	public function __construct(category:String=null, action:String=null, label:String=null, value:Int=null, noninteraction:Bool=null) {
+	function __construct(category:String=null, action:String=null, label:String=null, value:Int=null, noninteraction:Bool=null) {
 		if(category       !== null) this.setCategory(category);
 		if(action         !== null) this.setAction(action);
 		if(label          !== null) this.setLabel(label);
@@ -72,7 +72,7 @@ class Event {
 		if(noninteraction !== null) this.setNoninteraction(noninteraction);
 	}
 	
-	public function validate() : Void {
+	function validate() : Void {
 		if(this.category === null || this.action === null) {
 			Tracker._raiseError('Events need at least to have a category and action defined.', __METHOD__);
 		}
@@ -80,61 +80,61 @@ class Event {
 	
 	/**
 	 */
-	public function getCategory() : String {
+	function getCategory() : String {
 		return this.category;
 	}
 	
 	/**
 	 */
-	public function setCategory(category:String) {
+	function setCategory(category:String) {
 		this.category = category;
 	}
 	
 	/**
 	 */
-	public function getAction() : String {
+	function getAction() : String {
 		return this.action;
 	}
 	
 	/**
 	 */
-	public function setAction(action:String) {
+	function setAction(action:String) {
 		this.action = action;
 	}
 	
 	/**
 	 */
-	public function getLabel() : String {
+	function getLabel() : String {
 		return this.label;
 	}
 	
 	/**
 	 */
-	public function setLabel(label:String) {
+	function setLabel(label:String) {
 		this.label = label;
 	}
 	
 	/**
 	 */
-	public function getValue() : Int {
+	function getValue() : Int {
 		return this.value;
 	}
 	
 	/**
 	 */
-	public function setValue(value:Int) {
+	function setValue(value:Int) {
 		this.value = (int)value;
 	}
 	
 	/**
 	 */
-	public function getNoninteraction() : Bool {
+	function getNoninteraction() : Bool {
 		return this.noninteraction;
 	}
 	
 	/**
 	 */
-	public function setNoninteraction(value:Bool) {
+	function setNoninteraction(value:Bool) {
 		this.noninteraction = (bool)value;
 	}
 	

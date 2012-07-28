@@ -24,19 +24,19 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Item;
+import googleAnalytics.Item;
 
-import GoogleAnalytics.Internals.ParameterHolder;
+import googleAnalytics.internals.ParameterHolder;
 
 
 class ItemRequest extends Request {
 	
 	/**
-	 * @var GoogleAnalytics.Item
+	 * @var googleAnalytics.Item
 	 */
-	private var item : GoogleAnalytics;
+	private var item : googleAnalytics;
 	
 	
 	/**
@@ -47,9 +47,9 @@ class ItemRequest extends Request {
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/ecommerce/Item.as#61
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = super.buildParameters();		
 		
 		p.utmtid = this.item.getOrderId();
@@ -65,34 +65,34 @@ class ItemRequest extends Request {
 	/**
 	 * The GA Javascript client doesn't send any visitor information for
 	 * e-commerce requests, so we don't either.
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildVisitorParameters(p:ParameterHolder) : GoogleAnalytics {
+	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
 		return p;
 	}
 	
 	/**
 	 * The GA Javascript client doesn't send any custom variables for
 	 * e-commerce requests, so we don't either.
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : GoogleAnalytics {
+	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
 		return p;
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Item
+	 * @return googleAnalytics.Item
 	 */
-	public function getItem() : GoogleAnalytics {
+	function getItem() : googleAnalytics {
 		return this.item;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Item $item
+	 * @param googleAnalytics.Item $item
 	 */
-	public function setItem(item:Item) {
+	function setItem(item:Item) {
 		this.item = item;
 	}
 	

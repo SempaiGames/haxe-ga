@@ -24,9 +24,9 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
-import GoogleAnalytics.Internals.Util;
+import googleAnalytics.internals.Util;
 import DateTime;
 
 /**
@@ -38,21 +38,21 @@ class Visitor {
 	
 	/**
 	 * Unique user ID, will be part of the "__utma" cookie parameter
-	 * @see Internals.ParameterHolder::$__utma
+	 * @see internals.ParameterHolder::$__utma
 	 */
 	private var uniqueId : Int;
 	
 	/**
 	 * Time of the very first visit of this user, will be part of the "__utma"
 	 * cookie parameter
-	 * @see Internals.ParameterHolder::$__utma
+	 * @see internals.ParameterHolder::$__utma
 	 */
 	private var firstVisitTime : DateTime;
 	
 	/**
 	 * Time of the previous visit of this user, will be part of the "__utma"
 	 * cookie parameter
-	 * @see Internals.ParameterHolder::$__utma
+	 * @see internals.ParameterHolder::$__utma
 	 * @see addSession
 	 */
 	private var previousVisitTime : DateTime;
@@ -60,7 +60,7 @@ class Visitor {
 	/**
 	 * Time of the current visit of this user, will be part of the "__utma"
 	 * cookie parameter
-	 * @see Internals.ParameterHolder::$__utma
+	 * @see internals.ParameterHolder::$__utma
 	 * @see addSession
 	 */
 	private var currentVisitTime : DateTime;
@@ -68,51 +68,51 @@ class Visitor {
 	/**
 	 * Amount of total visits by this user, will be part of the "__utma"
 	 * cookie parameter
-	 * @see Internals.ParameterHolder::$__utma
+	 * @see internals.ParameterHolder::$__utma
 	 */
 	private var visitCount : Int;
 	
 	/**
 	 * IP Address of the end user, e.g. "123.123.123.123", will be mapped to "utmip" parameter
 	 * and "X-Forwarded-For" request header
-	 * @see Internals.ParameterHolder::$utmip
-	 * @see Internals.Request\HttpRequest::$xForwardedFor
+	 * @see internals.ParameterHolder::$utmip
+	 * @see internals.request\HttpRequest::$xForwardedFor
 	 */
 	private var ipAddress : String;
 	
 	/**
 	 * User agent string of the end user, will be mapped to "User-Agent" request header
-	 * @see Internals.Request\HttpRequest::$userAgent
+	 * @see internals.request\HttpRequest::$userAgent
 	 */
 	private var userAgent : String;
 	
 	/**
 	 * Locale string (country part optional), e.g. "de-DE", will be mapped to "utmul" parameter
-	 * @see Internals.ParameterHolder::$utmul
+	 * @see internals.ParameterHolder::$utmul
 	 */
 	private var locale : String;
 	
 	/**
 	 * Visitor's Flash version, e.g. "9.0 r28", will be maped to "utmfl" parameter
-	 * @see Internals.ParameterHolder::$utmfl
+	 * @see internals.ParameterHolder::$utmfl
 	 */
 	private var flashVersion : String;
 	
 	/**
 	 * Visitor's Java support, will be mapped to "utmje" parameter
-	 * @see Internals.ParameterHolder::$utmje
+	 * @see internals.ParameterHolder::$utmje
 	 */
 	private var javaEnabled : Bool;
 	
 	/**
 	 * Visitor's screen color depth, e.g. 32, will be mapped to "utmsc" parameter
-	 * @see Internals.ParameterHolder::$utmsc
+	 * @see internals.ParameterHolder::$utmsc
 	 */
 	private var screenColorDepth : String;
 	
 	/**
 	 * Visitor's screen resolution, e.g. "1024x768", will be mapped to "utmsr" parameter
-	 * @see Internals.ParameterHolder::$utmsr
+	 * @see internals.ParameterHolder::$utmsr
 	 */
 	private var screenResolution : String;
 	
@@ -120,7 +120,7 @@ class Visitor {
 	/**
 	 * Creates a new visitor without any previous visit information.
 	 */
-	public function __construct() {
+	function __construct() {
 		// ga.js sets all three timestamps to now for new visitors, so we do the same
 		now = new DateTime();
 		this.setFirstVisitTime(now);
@@ -134,11 +134,11 @@ class Visitor {
 	 * Will extract information for the "uniqueId", "firstVisitTime", "previousVisitTime",
 	 * "currentVisitTime" and "visitCount" properties from the given "__utma" cookie
 	 * value.
-	 * @see Internals.ParameterHolder::$__utma
-	 * @see Internals.Request\Request::buildCookieParameters()
+	 * @see internals.ParameterHolder::$__utma
+	 * @see internals.request\Request::buildCookieParameters()
 	 * @return $this
 	 */
-	public function fromUtma(value:String) {
+	function fromUtma(value:String) {
 		parts = value.split('.');
 		if(parts.length != 6) {
 			Tracker._raiseError('The given "__utma" cookie value is invalid.', __METHOD__);
@@ -160,7 +160,7 @@ class Visitor {
 	 * from the given $_SERVER variable.
 	 * @return $this
 	 */
-	public function fromServerVar() {
+	function fromServerVar() {
 		if(!empty(value.get('REMOTE_ADDR'))) {
 			ip = null;
 			for(key in [ 'X_FORWARDED_FOR', 'REMOTE_ADDR' ]) {
@@ -191,8 +191,8 @@ class Visitor {
 		if(!empty(value.get('HTTP_ACCEPT_LANGUAGE'))) {
 			parsedLocales = [];
 			if(preg_match_all('/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{0,3})?|0(\.[0-9]{0,3})))?/i', value.get('HTTP_ACCEPT_LANGUAGE'), matches)) {
-				matches[2] = array_map(public function(part) { return part.replace('-', '_'); }, matches[2]);
-				matches[5] = array_map(public function(part) { return part === '' ? 1 : part; }, matches[5]);
+				matches[2] = array_map(function(part) { return part.replace('-', '_'); }, matches[2]);
+				matches[5] = array_map(function(part) { return part === '' ? 1 : part; }, matches[5]);
 				parsedLocales = array_combine(matches[2], matches[5]);
 				arsort(parsedLocales, SORT_NUMERIC);
 				parsedLocales = parsedLocales.keys();
@@ -232,7 +232,7 @@ class Visitor {
 	/**
 	 * @see generateUniqueId
 	 */
-	public function setUniqueId(value:Int) {
+	function setUniqueId(value:Int) {
 		if(value < 0 || value > 0x7fffffff) {
 			Tracker._raiseError('Visitor unique ID has to be a 32-bit integer between 0 and ' + 0x7fffffff + '.', __METHOD__);
 		}
@@ -244,7 +244,7 @@ class Visitor {
 	 * Will be generated on first call (if not set already) to include as much
 	 * user-specific information as possible.
 	 */
-	public function getUniqueId() : Int {
+	function getUniqueId() : Int {
 		if(this.uniqueId === null) {
 			this.uniqueId = this.generateUniqueId();
 		}
@@ -255,7 +255,7 @@ class Visitor {
 	 * Updates the "previousVisitTime", "currentVisitTime" and "visitCount"
 	 * fields based on the given session object.
 	 */
-	public function addSession(session:Session) {
+	function addSession(session:Session) {
 		startTime = session.getStartTime();
 		if(startTime != this.currentVisitTime) {
 			this.previousVisitTime = this.currentVisitTime;
@@ -266,133 +266,133 @@ class Visitor {
 	
 	/**
 	 */
-	public function setFirstVisitTime(value:DateTime) {
+	function setFirstVisitTime(value:DateTime) {
 		this.firstVisitTime = value;
 	}
 	
 	/**
 	 */
-	public function getFirstVisitTime() : DateTime {
+	function getFirstVisitTime() : DateTime {
 		return this.firstVisitTime;
 	}
 	
 	/**
 	 */
-	public function setPreviousVisitTime(value:DateTime) {
+	function setPreviousVisitTime(value:DateTime) {
 		this.previousVisitTime = value;
 	}
 	
 	/**
 	 */
-	public function getPreviousVisitTime() : DateTime {
+	function getPreviousVisitTime() : DateTime {
 		return this.previousVisitTime;
 	}
 	
 	/**
 	 */
-	public function setCurrentVisitTime(value:DateTime) {
+	function setCurrentVisitTime(value:DateTime) {
 		this.currentVisitTime = value;
 	}
 	
 	/**
 	 */
-	public function getCurrentVisitTime() : DateTime {
+	function getCurrentVisitTime() : DateTime {
 		return this.currentVisitTime;
 	}
 	
 	/**
 	 */
-	public function setVisitCount(value:Int) {
+	function setVisitCount(value:Int) {
 		this.visitCount = (int)value;
 	}
 	
 	/**
 	 */
-	public function getVisitCount() : Int {
+	function getVisitCount() : Int {
 		return this.visitCount;
 	}
 	
 	/**
 	 */
-	public function setIpAddress(value:String) {
+	function setIpAddress(value:String) {
 		this.ipAddress = value;
 	}
 	
 	/**
 	 */
-	public function getIpAddress() : String {
+	function getIpAddress() : String {
 		return this.ipAddress;
 	}
 	
 	/**
 	 */
-	public function setUserAgent(value:String) {
+	function setUserAgent(value:String) {
 		this.userAgent = value;
 	}
 	
 	/**
 	 */
-	public function getUserAgent() : String {
+	function getUserAgent() : String {
 		return this.userAgent;
 	}
 	
 	/**
 	 */
-	public function setLocale(value:String) {
+	function setLocale(value:String) {
 		this.locale = value;
 	}
 	
 	/**
 	 */
-	public function getLocale() : String {
+	function getLocale() : String {
 		return this.locale;
 	}
 	
 	/**
 	 */
-	public function setFlashVersion(value:String) {
+	function setFlashVersion(value:String) {
 		this.flashVersion = value;
 	}
 	
 	/**
 	 */
-	public function getFlashVersion() : String {
+	function getFlashVersion() : String {
 		return this.flashVersion;
 	}
 	
 	/**
 	 */
-	public function setJavaEnabled(value:Bool) {
+	function setJavaEnabled(value:Bool) {
 		this.javaEnabled = (bool)value;
 	}
 	
 	/**
 	 */
-	public function getJavaEnabled() : Bool {
+	function getJavaEnabled() : Bool {
 		return this.javaEnabled;
 	}
 	
 	/**
 	 */
-	public function setScreenColorDepth(value:Int) {
+	function setScreenColorDepth(value:Int) {
 		this.screenColorDepth = (int)value;
 	}
 	
 	/**
 	 */
-	public function getScreenColorDepth() : String {
+	function getScreenColorDepth() : String {
 		return this.screenColorDepth;
 	}
 	
 	/**
 	 */
-	public function setScreenResolution(value:String) {
+	function setScreenResolution(value:String) {
 		this.screenResolution = value;
 	}
 	
 	/**
 	 */
-	public function getScreenResolution() : String {
+	function getScreenResolution() : String {
 		return this.screenResolution;
 	}
 	

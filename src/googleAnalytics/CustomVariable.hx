@@ -24,9 +24,9 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
-ImportAll GoogleAnalytics.Internals.Util;
+ImportAll googleAnalytics.internals.Util;
 
 /**
  * @link http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html
@@ -77,14 +77,14 @@ class CustomVariable {
 	/**
 	 * @param scope See SCOPE_* constants
 	 */
-	public function __construct(index:Int=null, name:String=null, value:Dynamic=null, scope:Int=null) {
+	function __construct(index:Int=null, name:String=null, value:Dynamic=null, scope:Int=null) {
 		if(index !== null) this.setIndex(index);
 		if(name  !== null) this.setName(name);
 		if(value !== null) this.setValue(value);
 		if(scope !== null) this.setScope(scope);
 	}
 	
-	public function validate() : Void {
+	function validate() : Void {
 		// According to the GA documentation, there is a limit to the combined size of
 		// name and value of 64 bytes after URL encoding,
 		// see http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#varTypes
@@ -98,14 +98,14 @@ class CustomVariable {
 	
 	/**
 	 */
-	public function getIndex() : Int {
+	function getIndex() : Int {
 		return this.index;
 	}
 	
 	/**
 	 * @link http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#usage
 	 */
-	public function setIndex(index:Int) {
+	function setIndex(index:Int) {
 		// Custom Variables are limited to five slots officially, but there seems to be a
 		// trick to allow for more of them which we could investigate at a later time (see
 		// http://analyticsimpact.com/2010/05/24/get-more-than-5-custom-variables-in-google-analytics/)
@@ -118,37 +118,37 @@ class CustomVariable {
 	
 	/**
 	 */
-	public function getName() : String {
+	function getName() : String {
 		return this.name;
 	}
 	
 	/**
 	 */
-	public function setName(name:String) {
+	function setName(name:String) {
 		this.name = name;
 	}
 	
 	/**
 	 */
-	public function getValue() : Dynamic {
+	function getValue() : Dynamic {
 		return this.value;
 	}
 	
 	/**
 	 */
-	public function setValue(value:Dynamic) {
+	function setValue(value:Dynamic) {
 		this.value = value;
 	}
 	
 	/**
 	 */
-	public function getScope() : Int {
+	function getScope() : Int {
 		return this.scope;
 	}
 	
 	/**
 	 */
-	public function setScope(scope:Int) {
+	function setScope(scope:Int) {
 		if(!in_array(scope, [ /*self.*/SCOPE_PAGE, /*self.*/SCOPE_SESSION, /*self.*/SCOPE_VISITOR ])) {
 			Tracker._raiseError('Custom Variable scope has to be one of the CustomVariable::SCOPE_* constant values.', __METHOD__);
 		}

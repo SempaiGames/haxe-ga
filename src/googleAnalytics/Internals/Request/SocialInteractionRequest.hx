@@ -24,17 +24,17 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.SocialInteraction;
+import googleAnalytics.SocialInteraction;
 
 
 class SocialinteractionRequest extends PageviewRequest {
 	
 	/**
-	 * @var GoogleAnalytics.SocialInteraction
+	 * @var googleAnalytics.SocialInteraction
 	 */
-	private var socialInteraction : GoogleAnalytics;
+	private var socialInteraction : googleAnalytics;
 	
 	
 	/**
@@ -44,9 +44,9 @@ class SocialinteractionRequest extends PageviewRequest {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = super.buildParameters();
 		
 		p.utmsn  = this.socialInteraction.getNetwork();
@@ -62,16 +62,16 @@ class SocialinteractionRequest extends PageviewRequest {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.SocialInteraction
+	 * @return googleAnalytics.SocialInteraction
 	 */
-	public function getSocialInteraction() : GoogleAnalytics {
+	function getSocialInteraction() : googleAnalytics {
 		return this.socialInteraction;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.SocialInteraction $socialInteraction
+	 * @param googleAnalytics.SocialInteraction $socialInteraction
 	 */
-	public function setSocialInteraction(socialInteraction:SocialInteraction) {
+	function setSocialInteraction(socialInteraction:SocialInteraction) {
 		this.socialInteraction = socialInteraction;
 	}
 	

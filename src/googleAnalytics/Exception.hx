@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 /**
  * @see Config::$errorSeverity

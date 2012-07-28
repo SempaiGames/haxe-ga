@@ -24,19 +24,19 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Page;
+import googleAnalytics.Page;
 
-import GoogleAnalytics.Internals.X10;
+import googleAnalytics.internals.X10;
 
 
 class PageviewRequest extends Request {
 	
 	/**
-	 * @var GoogleAnalytics.Page
+	 * @var googleAnalytics.Page
 	 */
-	private var page : GoogleAnalytics;
+	private var page : googleAnalytics;
 	
 	
 	/**
@@ -52,9 +52,9 @@ class PageviewRequest extends Request {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = super.buildParameters();
 		
 		p.utmp  = this.page.getPath();
@@ -88,16 +88,16 @@ class PageviewRequest extends Request {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Page
+	 * @return googleAnalytics.Page
 	 */
-	public function getPage() : GoogleAnalytics {
+	function getPage() : googleAnalytics {
 		return this.page;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Page $page
+	 * @param googleAnalytics.Page $page
 	 */
-	public function setPage(page:Page) {
+	function setPage(page:Page) {
 		this.page = page;
 	}
 	

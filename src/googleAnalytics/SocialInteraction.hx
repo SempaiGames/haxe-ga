@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 
 class SocialInteraction {
@@ -32,14 +32,14 @@ class SocialInteraction {
 	/**
 	 * Required. A string representing the social network being tracked (e.g. "Facebook", "Twitter", "LinkedIn", ...),
 	 * will be mapped to "utmsn" parameter
-	 * @see Internals.ParameterHolder::$utmsn
+	 * @see internals.ParameterHolder::$utmsn
 	 */
 	private var network : String;
 	
 	/**
 	 * Required. A string representing the social action being tracked (e.g. "Like", "Share", "Tweet", ...),
 	 * will be mapped to "utmsa" parameter
-	 * @see Internals.ParameterHolder::$utmsa
+	 * @see internals.ParameterHolder::$utmsa
 	 */
 	private var action : String;
 	
@@ -49,20 +49,20 @@ class SocialInteraction {
 	 * of the page, or an ID used to identify the page in a content management system. In many cases,
 	 * the page you Like is the same page you are on. So if this parameter is not given, we will default
 	 * to using the path of the corresponding Page object.
-	 * @see Internals.ParameterHolder::$utmsid
+	 * @see internals.ParameterHolder::$utmsid
 	 */
 	private var target : String;
 	
 	
 	/**
 	 */
-	public function __construct(network=null, action=null, target=null) {
+	function __construct(network=null, action=null, target=null) {
 		if(network !== null) this.setNetwork(network);
 		if(action  !== null) this.setAction(action);
 		if(target  !== null) this.setTarget(target);
 	}
 	
-	public function validate() : Void {
+	function validate() : Void {
 		if(this.network === null || this.action === null) {
 			Tracker._raiseError('Social interactions need to have at least the "network" and "action" attributes defined.', __METHOD__);
 		}
@@ -70,37 +70,37 @@ class SocialInteraction {
 	
 	/**
 	 */
-	public function setNetwork(network:String) {
+	function setNetwork(network:String) {
 		this.network = network;
 	}
 	
 	/**
 	 */
-	public function getNetwork() : String {
+	function getNetwork() : String {
 		return this.network;
 	}
 	
 	/**
 	 */
-	public function setAction(action:String) {
+	function setAction(action:String) {
 		this.action = action;
 	}
 	
 	/**
 	 */
-	public function getAction() : String {
+	function getAction() : String {
 		return this.action;
 	}
 	
 	/**
 	 */
-	public function setTarget(target:String) {
+	function setTarget(target:String) {
 		this.target = target;
 	}
 	
 	/**
 	 */
-	public function getTarget() : String {
+	function getTarget() : String {
 		return this.target;
 	}
 	

@@ -24,11 +24,11 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Config;
+import googleAnalytics.Config;
 
-import GoogleAnalytics.Internals.Util;
+import googleAnalytics.internals.Util;
 
 /**
  * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/GIFRequest.as
@@ -43,9 +43,9 @@ class HttpRequest {
 	private var type : String;
 	
 	/**
-	 * @var GoogleAnalytics.Config
+	 * @var googleAnalytics.Config
 	 */
-	private var config : GoogleAnalytics;
+	private var config : googleAnalytics;
 	
 	/**
 	 */
@@ -57,23 +57,23 @@ class HttpRequest {
 	
 	
 	/**
-	 * @param GoogleAnalytics.Config $config
+	 * @param googleAnalytics.Config $config
 	 */
-	public function __construct(config:Config=null) {
+	function __construct(config:Config=null) {
 		this.setConfig(config ? config : new Config());
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Config
+	 * @return googleAnalytics.Config
 	 */
-	public function getConfig() : GoogleAnalytics {
+	function getConfig() : googleAnalytics {
 		return this.config;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Config $config
+	 * @param googleAnalytics.Config $config
 	 */
-	public function setConfig(config:Config) {
+	function setConfig(config:Config) {
 		this.config = config;
 	}
 	
@@ -148,7 +148,7 @@ class HttpRequest {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
 	private abstract function buildParameters() : Void;
 	
@@ -161,7 +161,7 @@ class HttpRequest {
 	 * @see HttpRequest::fire()
 	 * @return null|string|bool
 	 */
-	public function _send() : null {
+	function _send() : null {
 		request = this.buildHttpRequest();
 		response = null;
 		
@@ -207,7 +207,7 @@ class HttpRequest {
 	 * Simply delegates to send() if config option "sendOnShutdown" is disabled
 	 * or enqueues the request by registering a PHP shutdown function.
 	 */
-	public function fire() {
+	function fire() {
 		if(this.config.getSendOnShutdown()) {
 			// This dumb variable assignment is needed as PHP prohibits using
 			// $this in closure use statements
@@ -215,7 +215,7 @@ class HttpRequest {
 			// We use a closure here to retain the current values/states of
 			// this instance and $request (as the use statement will copy them
 			// into its own scope)
-			register_shutdown_function(public function() use(instance) {
+			register_shutdown_function(function() use(instance) {
 				instance._send();
 			});
 		} else {

@@ -24,34 +24,34 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Tracker;
-import GoogleAnalytics.Visitor;
-import GoogleAnalytics.Session;
-import GoogleAnalytics.CustomVariable;
+import googleAnalytics.Tracker;
+import googleAnalytics.Visitor;
+import googleAnalytics.Session;
+import googleAnalytics.CustomVariable;
 
-import GoogleAnalytics.Internals.ParameterHolder;
-import GoogleAnalytics.Internals.Util;
-import GoogleAnalytics.Internals.X10;
+import googleAnalytics.internals.ParameterHolder;
+import googleAnalytics.internals.Util;
+import googleAnalytics.internals.X10;
 
 
 class Request extends HttpRequest {
 	
 	/**
-	 * @var GoogleAnalytics.Tracker
+	 * @var googleAnalytics.Tracker
 	 */
-	private var tracker : GoogleAnalytics;
+	private var tracker : googleAnalytics;
 	
 	/**
-	 * @var GoogleAnalytics.Visitor
+	 * @var googleAnalytics.Visitor
 	 */
-	private var visitor : GoogleAnalytics;
+	private var visitor : googleAnalytics;
 	
 	/**
-	 * @var GoogleAnalytics.Session
+	 * @var googleAnalytics.Session
 	 */
-	private var session : GoogleAnalytics;
+	private var session : googleAnalytics;
 	
 	
 	/**
@@ -135,9 +135,9 @@ class Request extends HttpRequest {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = new ParameterHolder();
 		
 		p.utmac = this.tracker.getAccountId();
@@ -169,10 +169,10 @@ class Request extends HttpRequest {
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildVisitorParameters(p:ParameterHolder) : GoogleAnalytics {
+	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
 		// Ensure correct locale format, see https://developer.mozilla.org/en/navigator.language
 		p.utmul = ((this.visitor.getLocale()).replace('_', '-')).toLowerCase();
 		
@@ -192,10 +192,10 @@ class Request extends HttpRequest {
 	
 	/**
 	 * @link http://xahlee.org/js/google_analytics_tracker_2010-07-01_expanded.js line 575
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : GoogleAnalytics {
+	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
 		customVars = this.tracker.getCustomVariables();
 		if(customVars) {
 			if(customVars.length > 5) {
@@ -230,10 +230,10 @@ class Request extends HttpRequest {
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/GIFRequest.as#123
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCookieParameters(p:ParameterHolder) : GoogleAnalytics {
+	private function buildCookieParameters(p:ParameterHolder) : googleAnalytics {
 		domainHash = this.generateDomainHash();
 		
 		p.__utma  = domainHash + '.';
@@ -266,10 +266,10 @@ class Request extends HttpRequest {
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Internals.ParameterHolder $p
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @param googleAnalytics.internals.ParameterHolder $p
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCampaignParameters(p:ParameterHolder) : GoogleAnalytics {
+	private function buildCampaignParameters(p:ParameterHolder) : googleAnalytics {
 		campaign = this.tracker.getCampaign();
 		if(campaign) {
 			p.__utmz  = this.generateDomainHash() + '.';
@@ -314,44 +314,44 @@ class Request extends HttpRequest {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Tracker
+	 * @return googleAnalytics.Tracker
 	 */
-	public function getTracker() : GoogleAnalytics {
+	function getTracker() : googleAnalytics {
 		return this.tracker;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Tracker $tracker
+	 * @param googleAnalytics.Tracker $tracker
 	 */
-	public function setTracker(tracker:Tracker) {
+	function setTracker(tracker:Tracker) {
 		this.tracker = tracker;
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Visitor
+	 * @return googleAnalytics.Visitor
 	 */
-	public function getVisitor() : GoogleAnalytics {
+	function getVisitor() : googleAnalytics {
 		return this.visitor;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Visitor $visitor
+	 * @param googleAnalytics.Visitor $visitor
 	 */
-	public function setVisitor(visitor:Visitor) {
+	function setVisitor(visitor:Visitor) {
 		this.visitor = visitor;
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Session
+	 * @return googleAnalytics.Session
 	 */
-	public function getSession() : GoogleAnalytics {
+	function getSession() : googleAnalytics {
 		return this.session;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Session $session
+	 * @param googleAnalytics.Session $session
 	 */
-	public function setSession(session:Session) {
+	function setSession(session:Session) {
 		this.session = session;
 	}
 	

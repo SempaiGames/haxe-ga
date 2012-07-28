@@ -24,39 +24,39 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 class Page {
 	
 	/**
 	 * Page request URI, e.g. "/path/page.html", will be mapped to
 	 * "utmp" parameter
-	 * @see Internals.ParameterHolder::$utmp
+	 * @see internals.ParameterHolder::$utmp
 	 */
 	private var path : String;
 	
 	/**
 	 * Page title, will be mapped to "utmdt" parameter
-	 * @see Internals.ParameterHolder::$utmdt
+	 * @see internals.ParameterHolder::$utmdt
 	 */
 	private var title : String;
 	
 	/**
 	 * Charset encoding (e.g. "UTF-8"), will be mapped to "utmcs" parameter
-	 * @see Internals.ParameterHolder::$utmcs
+	 * @see internals.ParameterHolder::$utmcs
 	 */
 	private var charset : String;
 	
 	/**
 	 * Referer URL, e.g. "http://www.example.com/path/page.html",  will be
 	 * mapped to "utmr" parameter
-	 * @see Internals.ParameterHolder::$utmr
+	 * @see internals.ParameterHolder::$utmr
 	 */
 	private var referrer : String;
 	
 	/**
 	 * Page load time in milliseconds, will be encoded into "utme" parameter.
-	 * @see Internals.ParameterHolder::$utme
+	 * @see internals.ParameterHolder::$utme
 	 */
 	private var loadTime : Int;
 	
@@ -72,13 +72,13 @@ class Page {
 	
 	/**
 	 */
-	public function __construct(path:String) {
+	function __construct(path:String) {
 		this.setPath(path);
 	}
 	
 	/**
 	 */
-	public function setPath(path:String) {
+	function setPath(path:String) {
 		if(path && path[0] != '/') {
 			Tracker._raiseError('The page path should always start with a slash ("/").', __METHOD__);
 		}
@@ -88,49 +88,49 @@ class Page {
 	
 	/**
 	 */
-	public function getPath() : String {
+	function getPath() : String {
 		return this.path;
 	}
 	
 	/**
 	 */
-	public function setTitle(title:String) {
+	function setTitle(title:String) {
 		this.title = title;
 	}
 	
 	/**
 	 */
-	public function getTitle() : String {
+	function getTitle() : String {
 		return this.title;
 	}
 	
 	/**
 	 */
-	public function setCharset(encoding) {
+	function setCharset(encoding) {
 		this.charset = encoding;
 	}
 	
 	/**
 	 */
-	public function getCharset() : String {
+	function getCharset() : String {
 		return this.charset;
 	}
 	
 	/**
 	 */
-	public function setReferrer(referrer:String) {
+	function setReferrer(referrer:String) {
 		this.referrer = referrer;
 	}
 	
 	/**
 	 */
-	public function getReferrer() : String {
+	function getReferrer() : String {
 		return this.referrer;
 	}
 	
 	/**
 	 */
-	public function setLoadTime(loadTime:Int) {
+	function setLoadTime(loadTime:Int) {
 		if((int)loadTime != (float)loadTime) {
 			return Tracker._raiseError('Page load time must be specified in integer milliseconds.', __METHOD__);
 		}
@@ -140,7 +140,7 @@ class Page {
 	
 	/**
 	 */
-	public function getLoadTime() : Int {
+	function getLoadTime() : Int {
 		return this.loadTime;
 	}
 	

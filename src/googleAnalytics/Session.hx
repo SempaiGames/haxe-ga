@@ -24,9 +24,9 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
-import GoogleAnalytics.Internals.Util;
+import googleAnalytics.internals.Util;
 
 import DateTime;
 
@@ -40,7 +40,7 @@ class Session {
 	
 	/**
 	 * A unique per-session ID, will be mapped to "utmhid" parameter
-	 * @see Internals.ParameterHolder::$utmhid
+	 * @see internals.ParameterHolder::$utmhid
 	 */
 	private var sessionId : Int;
 	
@@ -48,20 +48,20 @@ class Session {
 	 * The amount of pageviews that were tracked within this session so far,
 	 * will be part of the "__utmb" cookie parameter.
 	 * Will get incremented automatically upon each request.
-	 * @see Internals.ParameterHolder::$__utmb
-	 * @see Internals.Request\Request::buildHttpRequest()
+	 * @see internals.ParameterHolder::$__utmb
+	 * @see internals.request\Request::buildHttpRequest()
 	 */
 	private var trackCount : Int;
 	
 	/**
 	 * Timestamp of the start of this new session, will be part of the "__utmb"
 	 * cookie parameter
-	 * @see Internals.ParameterHolder::$__utmb
+	 * @see internals.ParameterHolder::$__utmb
 	 */
 	private var startTime : DateTime;
 	
 	
-	public function __construct() : Void {
+	function __construct() : Void {
 		this.setSessionId(this.generateSessionId());
 		this.setTrackCount(0);
 		this.setStartTime(new DateTime());
@@ -70,11 +70,11 @@ class Session {
 	/**
 	 * Will extract information for the "trackCount" and "startTime"
 	 * properties from the given "__utmb" cookie value.
-	 * @see Internals.ParameterHolder::$__utmb
-	 * @see Internals.Request\Request::buildCookieParameters()
+	 * @see internals.ParameterHolder::$__utmb
+	 * @see internals.request\Request::buildCookieParameters()
 	 * @return $this
 	 */
-	public function fromUtmb(value:String) {
+	function fromUtmb(value:String) {
 		parts = value.split('.');
 		if(parts.length != 4) {
 			Tracker._raiseError('The given "__utmb" cookie value is invalid.', __METHOD__);
@@ -98,43 +98,43 @@ class Session {
 	
 	/**
 	 */
-	public function getSessionId() : Int {
+	function getSessionId() : Int {
 		return this.sessionId;
 	}
 	
 	/**
 	 */
-	public function setSessionId(sessionId:Int) {
+	function setSessionId(sessionId:Int) {
 		this.sessionId = sessionId;
 	}
 	
 	/**
 	 */
-	public function getTrackCount() : Int {
+	function getTrackCount() : Int {
 		return this.trackCount;
 	}
 	
 	/**
 	 */
-	public function setTrackCount(trackCount:Int) {
+	function setTrackCount(trackCount:Int) {
 		this.trackCount = (int)trackCount;
 	}
 	
 	/**
 	 */
-	public function increaseTrackCount(byAmount:Int=1) {
+	function increaseTrackCount(byAmount:Int=1) {
 		this.trackCount += byAmount;
 	}
 	
 	/**
 	 */
-	public function getStartTime() : DateTime {
+	function getStartTime() : DateTime {
 		return this.startTime;
 	}
 	
 	/**
 	 */
-	public function setStartTime(startTime:DateTime) {
+	function setStartTime(startTime:DateTime) {
 		this.startTime = startTime;
 	}
 

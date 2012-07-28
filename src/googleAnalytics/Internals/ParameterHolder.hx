@@ -24,9 +24,9 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals;
+package  googleAnalytics.internals;
 
-import GoogleAnalytics.Tracker;
+import googleAnalytics.Tracker;
 
 /**
  * This simple class is mainly meant to be a well-documented overview of all
@@ -429,7 +429,7 @@ class ParameterHolder {
 	 * Converts this parameter holder to a pure PHP array, filtering out all properties
 	 * prefixed with an underscore ("_").
 	 */
-	public function toArray() : NativeArray {
+	function toArray() : NativeArray {
 		array = [];
 		for(property => value in this) {
 			if(property[0] != '_') {

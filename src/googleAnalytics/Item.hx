@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 /**
  * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/ecommerce/Item.as
@@ -33,45 +33,45 @@ class Item {
 	
 	/**
 	 * Order ID, e.g. "a2343898", will be mapped to "utmtid" parameter
-	 * @see Internals.ParameterHolder::$utmtid
+	 * @see internals.ParameterHolder::$utmtid
 	 */
 	private var orderId : String;
 	
 	/**
 	 * Product Code. This is the sku code for a given product, e.g. "989898ajssi",
 	 * will be mapped to "utmipc" parameter
-	 * @see Internals.ParameterHolder::$utmipc
+	 * @see internals.ParameterHolder::$utmipc
 	 */
 	private var sku : String;
 	
 	/**
 	 * Product Name, e.g. "T-Shirt", will be mapped to "utmipn" parameter
-	 * @see Internals.ParameterHolder::$utmipn
+	 * @see internals.ParameterHolder::$utmipn
 	 */
 	private var name : String;
 	
 	/**
 	 * Variations on an item, e.g. "white", "black", "green" etc., will be mapped
 	 * to "utmiva" parameter
-	 * @see Internals.ParameterHolder::$utmiva
+	 * @see internals.ParameterHolder::$utmiva
 	 */
 	private var variation : String;
 	
 	/**
 	 * Unit Price. Value is set to numbers only (e.g. 19.95), will be mapped to
 	 * "utmipr" parameter
-	 * @see Internals.ParameterHolder::$utmipr
+	 * @see internals.ParameterHolder::$utmipr
 	 */
 	private var price : Float;
 	
 	/**
 	 * Unit Quantity, e.g. 4, will be mapped to "utmiqt" parameter
-	 * @see Internals.ParameterHolder::$utmiqt
+	 * @see internals.ParameterHolder::$utmiqt
 	 */
 	private var quantity : Int = 1;
 	
 	
-	public function validate() : Void {
+	function validate() : Void {
 		if(this.sku === null) {
 			Tracker._raiseError('Items need to have a sku/product code defined.', __METHOD__);
 		}
@@ -79,73 +79,73 @@ class Item {
 	
 	/**
 	 */
-	public function getOrderId() : String {
+	function getOrderId() : String {
 		return this.orderId;
 	}
 	
 	/**
 	 */
-	public function setOrderId(orderId:String) {
+	function setOrderId(orderId:String) {
 		this.orderId = orderId;
 	}
 	
 	/**
 	 */
-	public function getSku() : String {
+	function getSku() : String {
 		return this.sku;
 	}
 	
 	/**
 	 */
-	public function setSku(sku:String) {
+	function setSku(sku:String) {
 		this.sku = sku;
 	}
 	
 	/**
 	 */
-	public function getName() : String {
+	function getName() : String {
 		return this.name;
 	}
 	
 	/**
 	 */
-	public function setName(name:String) {
+	function setName(name:String) {
 		this.name = name;
 	}
 	
 	/**
 	 */
-	public function getVariation() : String {
+	function getVariation() : String {
 		return this.variation;
 	}
 	
 	/**
 	 */
-	public function setVariation(variation:String) {
+	function setVariation(variation:String) {
 		this.variation = variation;
 	}
 	
 	/**
 	 */
-	public function getPrice() : Float {
+	function getPrice() : Float {
 		return this.price;
 	}
 	
 	/**
 	 */
-	public function setPrice(price:Float) {
+	function setPrice(price:Float) {
 		this.price = (float)price;
 	}
 	
 	/**
 	 */
-	public function getQuantity() : Int {
+	function getQuantity() : Int {
 		return this.quantity;
 	}
 	
 	/**
 	 */
-	public function setQuantity(quantity:Int) {
+	function setQuantity(quantity:Int) {
 		this.quantity = (int)quantity;
 	}
 	

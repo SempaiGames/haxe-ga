@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
 /**
  * Note: Doesn't necessarily have to be consistent across requests, as it doesn't
@@ -53,7 +53,7 @@ class Config {
 	 */
 	static inline public var ERROR_SEVERITY_WARNINGS   = 1;
 	/**
-	 * Throw GoogleAnalytics.Exception exceptions.
+	 * Throw googleAnalytics.Exception exceptions.
 	 */
 	static inline public var ERROR_SEVERITY_EXCEPTIONS = 2;
 	
@@ -63,14 +63,14 @@ class Config {
 	 * This has two advantages:
 	 * 1) It effectively doesn't affect app performance
 	 * 2) It can e.g. handle custom variables that were set after scheduling a request
-	 * @see Internals.Request.HttpRequest::fire()
+	 * @see internals.request.HttpRequest::fire()
 	 */
 	private var sendOnShutdown : Bool = false;
 	
 	/**
 	 * Whether to make asynchronous requests to GA without waiting for any
 	 * response (speeds up doing requests).
-	 * @see Internals.Request.HttpRequest::send()
+	 * @see internals.request.HttpRequest::send()
 	 */
 	private var fireAndForget : Bool = false;
 	
@@ -80,12 +80,12 @@ class Config {
 	 * as the first and the full HTTP response (or null if the "fireAndForget"
 	 * option or simulation mode are used) as the second argument.
 	 */
-	private var loggingCallback : Closure;
+	private var loggingCallback : Dynamic;
 	
 	/**
 	 * Seconds (float allowed) to wait until timeout when connecting to the
 	 * Google analytics endpoint host
-	 * @see Internals.Request.HttpRequest::send()
+	 * @see internals.request.HttpRequest::send()
 	 */
 	private var requestTimeout : Float = 1;
 	
@@ -94,20 +94,20 @@ class Config {
 	/**
 	 * Google Analytics tracking request endpoint host. Can be set to null to
 	 * silently simulate (and log) requests without actually sending them.
-	 * @see Internals.Request.HttpRequest::send()
+	 * @see internals.request.HttpRequest::send()
 	 */
 	private var endPointHost : String = 'www.google-analytics.com';
 	
 	/**
 	 * Google Analytics tracking request endpoint path
-	 * @see Internals.Request.HttpRequest::send()
+	 * @see internals.request.HttpRequest::send()
 	 */
 	private var endPointPath : String = '/__utm.gif';
 	
 	/**
 	 * Whether to anonymize IP addresses within Google Analytics by stripping
 	 * the last IP address block, will be mapped to "aip" parameter
-	 * @see Internals.ParameterHolder::$aip
+	 * @see internals.ParameterHolder::$aip
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gat.html#_gat._anonymizeIp
 	 */
 	private var anonymizeIpAddresses : Bool = false;
@@ -120,12 +120,9 @@ class Config {
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._setSiteSpeedSampleRate
 	 */
 	private var sitespeedSampleRate : Int = 1;
-	
-	
-	/**
-	 */
-	public function __construct() {
-		for(property => value in properties) {
+		
+	function Config() {
+		/*for(property => value in properties) {
 			// PHP doesn't care about case in method names
 			setterMethod = 'set' + property;
 			
@@ -134,124 +131,87 @@ class Config {
 			} else {
 				return Tracker._raiseError('There is no setting "' + property + '".', __METHOD__);
 			}
-		}
+		}/*
 	}
 	
 	/**
 	 * @return int See self::ERROR_SEVERITY_* constants
 	 */
-	public function getErrorSeverity() : Int {
+	function getErrorSeverity() : Int {
 		return this.errorSeverity;
 	}
 	
 	/**
 	 * @param errorSeverity See self::ERROR_SEVERITY_* constants
 	 */
-	public function setErrorSeverity(errorSeverity:Int) {
+	function setErrorSeverity(errorSeverity:Int) {
 		this.errorSeverity = errorSeverity;
 	}
 	
-	/**
-	 */
-	public function getSendOnShutdown() : Bool {
+	function getSendOnShutdown() : Bool {
 		return this.sendOnShutdown;
 	}
 	
-	/**
-	 */
-	public function setSendOnShutdown(sendOnShutdown:Bool) {
+	function setSendOnShutdown(sendOnShutdown:Bool) {
 		this.sendOnShutdown = sendOnShutdown;
 	}
 	
-	/**
-	 */
-	public function getFireAndForget() : Bool {
+	function getFireAndForget() : Bool {
 		return this.fireAndForget;
 	}
 	
-	/**
-	 */
-	public function setFireAndForget(fireAndForget:Bool) {
-		this.fireAndForget = (bool)fireAndForget;
+	function setFireAndForget(fireAndForget:Bool) {
+		this.fireAndForget = fireAndForget;
 	}
 	
-	/**
-	 * @return Closure|null
-	 */
-	public function getLoggingCallback() : Closure {
+	function getLoggingCallback() : Dynamic {
 		return this.loggingCallback;
 	}
 	
-	/**
-	 */
-	public function setLoggingCallback(callback:Closure) {
-		this.loggingCallback = callback;
+	function setLoggingCallback(cb:Dynamic) {
+		this.loggingCallback = cb;
 	}
 	
-	/**
-	 */
-	public function getRequestTimeout() : Float {
+	function getRequestTimeout() : Float {
 		return this.requestTimeout;
 	}
 	
-	/**
-	 */
-	public function setRequestTimeout(requestTimeout:Float) {
-		this.requestTimeout = (float)requestTimeout;
+	function setRequestTimeout(requestTimeout:Float) {
+		this.requestTimeout = requestTimeout;
 	}
 	
-	/**
-	 * @return string|null
-	 */
-	public function getEndPointHost() : String {
+	function getEndPointHost() : String {
 		return this.endPointHost;
 	}
 	
-	/**
-	 * @param string|null $endPointHost
-	 */
-	public function setEndPointHost(endPointHost) {
+	function setEndPointHost(endPointHost:String) {
 		this.endPointHost = endPointHost;
 	}
 	
-	/**
-	 */
-	public function getEndPointPath() : String {
+	function getEndPointPath() : String {
 		return this.endPointPath;
 	}
 	
-	/**
-	 */
-	public function setEndPointPath(endPointPath:String) {
+	function setEndPointPath(endPointPath:String) {
 		this.endPointPath = endPointPath;
 	}
 	
-	/**
-	 */
-	public function getAnonymizeIpAddresses() : Bool {
+	function getAnonymizeIpAddresses() : Bool {
 		return this.anonymizeIpAddresses;
 	}
 	
-	/**
-	 */
-	public function setAnonymizeIpAddresses(anonymizeIpAddresses:Bool) {
+	function setAnonymizeIpAddresses(anonymizeIpAddresses:Bool) {
 		this.anonymizeIpAddresses = anonymizeIpAddresses;
 	}
 	
-	/**
-	 */
-	public function getSitespeedSampleRate() : Int {
+	function getSitespeedSampleRate() : Int {
 		return this.sitespeedSampleRate;
 	}
 	
-	/**
-	 */
-	public function setSitespeedSampleRate(sitespeedSampleRate:Int) {
-		if((int)sitespeedSampleRate != (float)sitespeedSampleRate || sitespeedSampleRate < 0 || sitespeedSampleRate > 100) {
+	function setSitespeedSampleRate(sitespeedSampleRate:Int) {
+		if(sitespeedSampleRate < 0 || sitespeedSampleRate > 100) {
 			return Tracker._raiseError('For consistency with ga.js, sample rates must be specified as a number between 0 and 100.', __METHOD__);
 		}
-		
-		this.sitespeedSampleRate = (int)sitespeedSampleRate;
+		this.sitespeedSampleRate = sitespeedSampleRate;
 	}
-
 }

@@ -24,9 +24,9 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
-import GoogleAnalytics.Internals.Util;
+import googleAnalytics.internals.Util;
 import DateTime;
 
 /**
@@ -38,13 +38,13 @@ class Campaign {
 	
 	/**
 	 * See self::TYPE_* constants, will be mapped to "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var type : String;
 	
 	/**
 	 * Time of the creation of this campaign, will be mapped to "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var creationTime : DateTime;
 	
@@ -52,64 +52,64 @@ class Campaign {
 	 * Response Count, will be mapped to "__utmz" parameter.
 	 * Is also used to determine whether the campaign is new or repeated,
 	 * which will be mapped to "utmcn" and "utmcr" parameters.
-	 * @see Internals.ParameterHolder::$__utmz
-	 * @see Internals.ParameterHolder::$utmcn
-	 * @see Internals.ParameterHolder::$utmcr
+	 * @see internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$utmcn
+	 * @see internals.ParameterHolder::$utmcr
 	 */
 	private var responseCount : Int = 0;
 	
 	/**
 	 * Campaign ID, a.k.a. "utm_id" query parameter for ga.js
 	 * Will be mapped to "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var id : Int;
 	
 	/**
 	 * Source, a.k.a. "utm_source" query parameter for ga.js.
 	 * Will be mapped to "utmcsr" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var source : String;
 	
 	/**
 	 * Google AdWords Click ID, a.k.a. "gclid" query parameter for ga.js.
 	 * Will be mapped to "utmgclid" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var gClickId : String;
 	
 	/**
 	 * DoubleClick (?) Click ID. Will be mapped to "utmdclid" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var dClickId : String;
 	
 	/**
 	 * Name, a.k.a. "utm_campaign" query parameter for ga.js.
 	 * Will be mapped to "utmccn" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var name : String;
 	
 	/**
 	 * Medium, a.k.a. "utm_medium" query parameter for ga.js.
 	 * Will be mapped to "utmcmd" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var medium : String;
 	
 	/**
 	 * Terms/Keywords, a.k.a. "utm_term" query parameter for ga.js.
 	 * Will be mapped to "utmctr" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var term : String;
 	
 	/**
 	 * Ad Content Description, a.k.a. "utm_content" query parameter for ga.js.
 	 * Will be mapped to "utmcct" key in "__utmz" parameter.
-	 * @see Internals.ParameterHolder::$__utmz
+	 * @see internals.ParameterHolder::$__utmz
 	 */
 	private var content : String;
 	
@@ -132,7 +132,7 @@ class Campaign {
 	 * @see createFromReferrer
 	 * @param type See TYPE_* constants
 	 */
-	public function __construct(type:String) {
+	function __construct(type:String) {
 		if(!in_array(type, [ /*self.*/TYPE_DIRECT, /*self.*/TYPE_ORGANIC, /*self.*/TYPE_REFERRAL ])) {
 			Tracker._raiseError('Campaign type has to be one of the Campaign::TYPE_* constant values.', __METHOD__);
 		}
@@ -163,7 +163,7 @@ class Campaign {
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignManager.as#333
-	 * @return GoogleAnalytics.Campaign
+	 * @return googleAnalytics.Campaign
 	 */
 	public static function createFromReferrer(url:String) {
 		instance = new static(/*self.*/TYPE_REFERRAL);
@@ -177,7 +177,7 @@ class Campaign {
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignTracker.as#153
 	 */
-	public function validate() {
+	function validate() {
 		// NOTE: gaforflash states that id and gClickId must also be specified,
 		// but that doesn't seem to be correct
 		if(!this.source) {
@@ -187,139 +187,139 @@ class Campaign {
 	
 	/**
 	 */
-	public function setType(type:String) {
+	function setType(type:String) {
 		this.type = type;
 	}
 	
 	/**
 	 */
-	public function getType() : String {
+	function getType() : String {
 		return this.type;
 	}
 	
 	/**
 	 */
-	public function setCreationTime(creationTime:DateTime) {
+	function setCreationTime(creationTime:DateTime) {
 		this.creationTime = creationTime;
 	}
 	
 	/**
 	 */
-	public function getCreationTime() : DateTime {
+	function getCreationTime() : DateTime {
 		return this.creationTime;
 	}
 	
 	/**
 	 */
-	public function setResponseCount(responseCount) {
+	function setResponseCount(responseCount) {
 		this.responseCount = (int)responseCount;
 	}
 	
 	/**
 	 */
-	public function getResponseCount() : Int {
+	function getResponseCount() : Int {
 		return this.responseCount;
 	}
 	
 	/**
 	 */
-	public function increaseResponseCount(byAmount:Int=1) {
+	function increaseResponseCount(byAmount:Int=1) {
 		this.responseCount += byAmount;
 	}
 	
 	/**
 	 */
-	public function setId(id:Int) {
+	function setId(id:Int) {
 		this.id = id;
 	}
 	
 	/**
 	 */
-	public function getId() : Int {
+	function getId() : Int {
 		return this.id;
 	}
 	
 	/**
 	 */
-	public function setSource(source:String) {
+	function setSource(source:String) {
 		this.source = source;
 	}
 	
 	/**
 	 */
-	public function getSource() : String {
+	function getSource() : String {
 		return this.source;
 	}
 	
 	/**
 	 */
-	public function setGClickId(gClickId:String) {
+	function setGClickId(gClickId:String) {
 		this.gClickId = gClickId;
 	}
 	
 	/**
 	 */
-	public function getGClickId() : String {
+	function getGClickId() : String {
 		return this.gClickId;
 	}
 	
 	/**
 	 */
-	public function setDClickId(dClickId:String) {
+	function setDClickId(dClickId:String) {
 		this.dClickId = dClickId;
 	}
 	
 	/**
 	 */
-	public function getDClickId() : String {
+	function getDClickId() : String {
 		return this.dClickId;
 	}
 	
 	/**
 	 */
-	public function setName(name:String) {
+	function setName(name:String) {
 		this.name = name;
 	}
 	
 	/**
 	 */
-	public function getName() : String {
+	function getName() : String {
 		return this.name;
 	}
 	
 	/**
 	 */
-	public function setMedium(medium:String) {
+	function setMedium(medium:String) {
 		this.medium = medium;
 	}
 	
 	/**
 	 */
-	public function getMedium() : String {
+	function getMedium() : String {
 		return this.medium;
 	}
 	
 	/**
 	 */
-	public function setTerm(term:String) {
+	function setTerm(term:String) {
 		this.term = term;
 	}
 	
 	/**
 	 */
-	public function getTerm() : String {
+	function getTerm() : String {
 		return this.term;
 	}
 	
 	/**
 	 */
-	public function setContent(content:String) {
+	function setContent(content:String) {
 		this.content = content;
 	}
 	
 	/**
 	 */
-	public function getContent() : String {
+	function getContent() : String {
 		return this.content;
 	}
 	

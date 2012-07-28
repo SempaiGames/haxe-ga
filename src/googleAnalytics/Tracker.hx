@@ -24,14 +24,14 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package GoogleAnalytics;
+package googleAnalytics;
 
-import GoogleAnalytics.Internals.Util;
-import GoogleAnalytics.Internals.Request.PageviewRequest;
-import GoogleAnalytics.Internals.Request.EventRequest;
-import GoogleAnalytics.Internals.Request.TransactionRequest;
-import GoogleAnalytics.Internals.Request.ItemRequest;
-import GoogleAnalytics.Internals.Request.SocialInteractionRequest;
+import googleAnalytics.internals.Util;
+import googleAnalytics.internals.request.PageviewRequest;
+import googleAnalytics.internals.request.EventRequest;
+import googleAnalytics.internals.request.TransactionRequest;
+import googleAnalytics.internals.request.ItemRequest;
+import googleAnalytics.internals.request.SocialInteractionRequest;
 
 
 class Tracker {
@@ -52,20 +52,20 @@ class Tracker {
 	
 	/**
 	 * The configuration to use for all tracker instances.
-	 * @var GoogleAnalytics.Config
+	 * @var googleAnalytics.Config
 	 */
-	private static var config : GoogleAnalytics;
+	private static var config : googleAnalytics;
 	
 	/**
 	 * Google Analytics account ID, e.g. "UA-1234567-8", will be mapped to
 	 * "utmac" parameter
-	 * @see Internals.ParameterHolder::$utmac
+	 * @see internals.ParameterHolder::$utmac
 	 */
 	private var accountId : String;
 	
 	/**
 	 * Host Name, e.g. "www.example.com", will be mapped to "utmhn" parameter
-	 * @see Internals.ParameterHolder::$utmhn
+	 * @see internals.ParameterHolder::$utmhn
 	 */
 	private var domainName : String;
 	
@@ -73,7 +73,7 @@ class Tracker {
 	 * Whether to generate a unique domain hash, default is true to be consistent
 	 * with the GA Javascript Client
 	 * @link http://code.google.com/apis/analytics/docs/tracking/gaTrackingSite.html#setAllowHash
-	 * @see Internals.Request\Request::generateDomainHash()
+	 * @see internals.request\Request::generateDomainHash()
 	 */
 	private var allowHash : Bool = true;
 	
@@ -82,15 +82,15 @@ class Tracker {
 	private var customVariables : NativeArray = [];
 	
 	/**
-	 * @var GoogleAnalytics.Campaign
+	 * @var googleAnalytics.Campaign
 	 */
-	private var campaign : GoogleAnalytics;
+	private var campaign : googleAnalytics;
 	
 	
 	/**
-	 * @param GoogleAnalytics.Config $config
+	 * @param googleAnalytics.Config $config
 	 */
-	public function __construct(accountId:String, domainName:String, config:Config=null) {
+	function __construct(accountId:String, domainName:String, config:Config=null) {
 		static.setConfig(config ? config : new Config());
 		
 		this.setAccountId(accountId);
@@ -98,14 +98,14 @@ class Tracker {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Config
+	 * @return googleAnalytics.Config
 	 */
-	public static function getConfig() : GoogleAnalytics {
+	public static function getConfig() : googleAnalytics {
 		return static.var config;
 	}	
 	
 	/**
-	 * @param GoogleAnalytics.Config $value
+	 * @param googleAnalytics.Config $value
 	 */
 	public static function setConfig(value:Config) {
 		static.var config = value;
@@ -113,7 +113,7 @@ class Tracker {
 	
 	/**
 	 */
-	public function setAccountId(value:String) {
+	function setAccountId(value:String) {
 		if(!preg_match('/^(UA|MO)-[0-9]*-[0-9]*$/', value)) {
 			static._raiseError('"' + value + '" is not a valid Google Analytics account ID.', __METHOD__);
 		}
@@ -123,40 +123,40 @@ class Tracker {
 	
 	/**
 	 */
-	public function getAccountId() : String {
+	function getAccountId() : String {
 		return this.accountId;
 	}
 	
 	/**
 	 */
-	public function setDomainName(value:String) {
+	function setDomainName(value:String) {
 		this.domainName = value;
 	}
 	
 	/**
 	 */
-	public function getDomainName() : String {
+	function getDomainName() : String {
 		return this.domainName;
 	}
 	
 	/**
 	 */
-	public function setAllowHash(value:Bool) {
+	function setAllowHash(value:Bool) {
 		this.allowHash = (bool)value;
 	}
 	
 	/**
 	 */
-	public function getAllowHash() : Bool {
+	function getAllowHash() : Bool {
 		return this.allowHash;
 	}
 	
 	/**
 	 * Equivalent of _setCustomVar() in GA Javascript client.
 	 * @link http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html
-	 * @param GoogleAnalytics.CustomVariable $customVariable
+	 * @param googleAnalytics.CustomVariable $customVariable
 	 */
-	public function addCustomVariable(customVariable:CustomVariable) {
+	function addCustomVariable(customVariable:CustomVariable) {
 		// Ensure that all required parameters are set
 		customVariable.validate();
 		
@@ -165,23 +165,23 @@ class Tracker {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.CustomVariable[]
+	 * @return googleAnalytics.CustomVariable[]
 	 */
-	public function getCustomVariables() : GoogleAnalytics {
+	function getCustomVariables() : googleAnalytics {
 		return this.customVariables;
 	}
 	
 	/**
 	 * Equivalent of _deleteCustomVar() in GA Javascript client.
 	 */
-	public function removeCustomVariable(index:Int) {
+	function removeCustomVariable(index:Int) {
 		unset(this.customVariables[index]);
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Campaign $campaign Isn't really optional, but can be set to null
+	 * @param googleAnalytics.Campaign $campaign Isn't really optional, but can be set to null
 	 */
-	public function setCampaign(campaign:Campaign=null) {
+	function setCampaign(campaign:Campaign=null) {
 		if(campaign) {
 			// Ensure that all required parameters are set
 			campaign.validate();
@@ -191,20 +191,20 @@ class Tracker {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Campaign|null
+	 * @return googleAnalytics.Campaign|null
 	 */
-	public function getCampaign() : GoogleAnalytics {
+	function getCampaign() : googleAnalytics {
 		return this.campaign;
 	}
 	
 	/**
 	 * Equivalent of _trackPageview() in GA Javascript client.
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._trackPageview
-	 * @param GoogleAnalytics.Page $page
-	 * @param GoogleAnalytics.Session $session
-	 * @param GoogleAnalytics.Visitor $visitor
+	 * @param googleAnalytics.Page $page
+	 * @param googleAnalytics.Session $session
+	 * @param googleAnalytics.Visitor $visitor
 	 */
-	public function trackPageview(page:Page, session:Session, visitor:Visitor) {
+	function trackPageview(page:Page, session:Session, visitor:Visitor) {
 		request = new PageviewRequest(static.var config);
 		request.setPage(page);
 		request.setSession(session);
@@ -216,11 +216,11 @@ class Tracker {
 	/**
 	 * Equivalent of _trackEvent() in GA Javascript client.
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEventTracking.html#_gat.GA_EventTracker_._trackEvent
-	 * @param GoogleAnalytics.Event $event
-	 * @param GoogleAnalytics.Session $session
-	 * @param GoogleAnalytics.Visitor $visitor
+	 * @param googleAnalytics.Event $event
+	 * @param googleAnalytics.Session $session
+	 * @param googleAnalytics.Visitor $visitor
 	 */
-	public function trackEvent(event:Event, session:Session, visitor:Visitor) {
+	function trackEvent(event:Event, session:Session, visitor:Visitor) {
 		// Ensure that all required parameters are set
 		event.validate();
 		
@@ -239,11 +239,11 @@ class Tracker {
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._addTrans
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._addItem
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._trackTrans
-	 * @param GoogleAnalytics.Transaction $transaction
-	 * @param GoogleAnalytics.Session $session
-	 * @param GoogleAnalytics.Visitor $visitor
+	 * @param googleAnalytics.Transaction $transaction
+	 * @param googleAnalytics.Session $session
+	 * @param googleAnalytics.Visitor $visitor
 	 */
-	public function trackTransaction(transaction:Transaction, session:Session, visitor:Visitor) {
+	function trackTransaction(transaction:Transaction, session:Session, visitor:Visitor) {
 		// Ensure that all required parameters are set
 		transaction.validate();
 		
@@ -272,12 +272,12 @@ class Tracker {
 	/**
 	 * Equivalent of _trackSocial() in GA Javascript client.
 	 * @link http://code.google.com/apis/analytics/docs/tracking/gaTrackingSocial.html#settingUp
-	 * @param GoogleAnalytics.SocialInteraction $socialInteraction
-	 * @param GoogleAnalytics.Page $page
-	 * @param GoogleAnalytics.Session $session
-	 * @param GoogleAnalytics.Visitor $visitor
+	 * @param googleAnalytics.SocialInteraction $socialInteraction
+	 * @param googleAnalytics.Page $page
+	 * @param googleAnalytics.Session $session
+	 * @param googleAnalytics.Visitor $visitor
 	 */
-	public function trackSocial(socialInteraction:SocialInteraction, page:Page, session:Session, visitor:Visitor) {
+	function trackSocial(socialInteraction:SocialInteraction, page:Page, session:Session, visitor:Visitor) {
 		request = new SocialInteractionRequest(static.var config);
 		request.setSocialInteraction(socialInteraction);
 		request.setPage(page);

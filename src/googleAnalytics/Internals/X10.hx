@@ -24,7 +24,7 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals;
+package  googleAnalytics.internals;
 
 /**
  * This is nearly a 1:1 PHP port of the gaforflash X10 class code.
@@ -112,37 +112,37 @@ class X10 {
 	
 	/**
 	 */
-	public function setKey(projectId:Int, num:Int, value:Dynamic) {
+	function setKey(projectId:Int, num:Int, value:Dynamic) {
 		this.setInternal(projectId, this.KEY, num, value);
 	}
 	
 	/**
 	 */
-	public function getKey(projectId:Int, num:Int) : Dynamic {
+	function getKey(projectId:Int, num:Int) : Dynamic {
 		return this.getInternal(projectId, this.KEY, num);
 	}
 	
 	/**
 	 */
-	public function clearKey(projectId:Int) {
+	function clearKey(projectId:Int) {
 		this.clearInternal(projectId, this.KEY);
 	}
 	
 	/**
 	 */
-	public function setValue(projectId:Int, num:Int, value:Dynamic) {
+	function setValue(projectId:Int, num:Int, value:Dynamic) {
 		this.setInternal(projectId, this.VALUE, num, value);
 	}
 	
 	/**
 	 */
-	public function getValue(projectId:Int, num:Int) : Dynamic {
+	function getValue(projectId:Int, num:Int) : Dynamic {
 		return this.getInternal(projectId, this.VALUE, num);
 	}
 	
 	/**
 	 */
-	public function clearValue(projectId:Int) {
+	function clearValue(projectId:Int) {
 		this.clearInternal(projectId, this.VALUE);
 	}
 	
@@ -264,7 +264,7 @@ class X10 {
 	/**
 	 * Generates the URL parameter string for the current internal extensible data state.
 	 */
-	public function renderUrlString() : String {
+	function renderUrlString() : String {
 		result = '';
 		
 		for(projectId => project in this.projectData) {

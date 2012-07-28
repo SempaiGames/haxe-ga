@@ -24,19 +24,19 @@
  * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
  */
 
-package  GoogleAnalytics.Internals.Request;
+package  googleAnalytics.internals.request;
 
-import GoogleAnalytics.Event;
+import googleAnalytics.Event;
 
-import GoogleAnalytics.Internals.X10;
+import googleAnalytics.internals.X10;
 
 
 class EventRequest extends Request {
 	
 	/**
-	 * @var GoogleAnalytics.Event
+	 * @var googleAnalytics.Event
 	 */
-	private var event : GoogleAnalytics;
+	private var event : googleAnalytics;
 	
 	
 	/**
@@ -53,9 +53,9 @@ class EventRequest extends Request {
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Tracker.as#1503
-	 * @return GoogleAnalytics.Internals.ParameterHolder
+	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : GoogleAnalytics {
+	private function buildParameters() : googleAnalytics {
 		p = super.buildParameters();
 		
 		x10 = new X10();
@@ -88,16 +88,16 @@ class EventRequest extends Request {
 	}
 	
 	/**
-	 * @return GoogleAnalytics.Event
+	 * @return googleAnalytics.Event
 	 */
-	public function getEvent() : GoogleAnalytics {
+	function getEvent() : googleAnalytics {
 		return this.event;
 	}
 	
 	/**
-	 * @param GoogleAnalytics.Event $event
+	 * @param googleAnalytics.Event $event
 	 */
-	public function setEvent(event:Event) {
+	function setEvent(event:Event) {
 		this.event = event;
 	}
 	
