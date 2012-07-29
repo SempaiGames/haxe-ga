@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
@@ -173,7 +173,7 @@ class Tracker {
 		request.setSession(session);
 		request.setVisitor(visitor);
 		request.setTracker(this);
-		request.fire();
+		request.send();
 	}
 	
 	/**
@@ -189,7 +189,7 @@ class Tracker {
 		request.setSession(session);
 		request.setVisitor(visitor);
 		request.setTracker(this);
-		request.fire();
+		request.send();
 	}
 	
 	/**
@@ -204,25 +204,26 @@ class Tracker {
 		// Ensure that all required parameters are set
 		transaction.validate();
 		
-		var request = new TransactionRequest(config);
-		request.setTransaction(transaction);
-		request.setSession(session);
-		request.setVisitor(visitor);
-		request.setTracker(this);
-		request.fire();
+		var transactionRequest = new TransactionRequest(config);
+		transactionRequest.setTransaction(transaction);
+		transactionRequest.setSession(session);
+		transactionRequest.setVisitor(visitor);
+		transactionRequest.setTracker(this);
+		transactionRequest.send();
 		
 		// Every item gets a separate request,
 		// see http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Tracker.as#312
+		var item:Item;
 		for(item in transaction.getItems()) {
 			// Ensure that all required parameters are set
 			item.validate();
 			
-			var request2 = new ItemRequest(config);
-			request2.setItem(item);
-			request2.setSession(session);
-			request2.setVisitor(visitor);
-			request2.setTracker(this);
-			request2.fire();
+			var itemRequest = new ItemRequest(config);
+			itemRequest.setItem(item);
+			itemRequest.setSession(session);
+			itemRequest.setVisitor(visitor);
+			itemRequest.setTracker(this);
+			itemRequest.send();
 		}
 	}
 	
@@ -237,7 +238,7 @@ class Tracker {
 		request.setSession(session);
 		request.setVisitor(visitor);
 		request.setTracker(this);
-		request.fire();
+		request.send();
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
@@ -62,12 +62,12 @@ class Event {
 	private var noninteraction : Bool = false;
 	
 	
-	public function new(category:String=null, action:String=null, label:String=null, value:Int=null, noninteraction:Bool=null) {
+	public function new(category:String=null, action:String=null, label:String=null, value:Int=0, noninteraction:Bool=false) {
 		if(category       != null) this.setCategory(category);
 		if(action         != null) this.setAction(action);
 		if(label          != null) this.setLabel(label);
-		if(value          != null) this.setValue(value);
-		if(noninteraction != null) this.setNoninteraction(noninteraction);
+		this.setValue(value);
+		this.setNoninteraction(noninteraction);
 	}
 	
 	public function validate() : Void {

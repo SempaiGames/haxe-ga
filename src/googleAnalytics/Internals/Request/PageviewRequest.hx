@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package  googleAnalytics.internals.request;
@@ -44,7 +44,6 @@ class PageviewRequest extends Request {
 	
 	override private function buildParameters() : ParameterHolder {
 		var p = super.buildParameters();
-		
 		p.utmp  = this.page.getPath();
 		p.utmdt = this.page.getTitle();
 		if(this.page.getCharset() != null) {
@@ -54,7 +53,7 @@ class PageviewRequest extends Request {
 			p.utmr = this.page.getReferrer();
 		}
 		
-		if(this.page.getLoadTime() != null) {
+		if(this.page.getLoadTime()!=0) {
 			// Sample sitespeed measurements
 			if(p.utmn % 100 < this.config.getSitespeedSampleRate()) {
 				p.utme += 0;

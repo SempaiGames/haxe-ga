@@ -1,4 +1,5 @@
--swf9 bin/Haxega.swf
+#-swf9 bin/Haxega.swf
+-js bin/Haxega.js
 -cp src
 -main Main
 -swf-version 10

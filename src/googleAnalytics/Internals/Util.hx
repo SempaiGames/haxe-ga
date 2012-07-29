@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package  googleAnalytics.internals;
@@ -46,10 +46,12 @@ class Util {
 	}
 	
 	public static function stringReplaceArray(s:String, sub:Array<String>, by:Array<String>):String {
-		for(i in 0...sub.length-1 ) {
-			s=StringTools.replace(s, sub[i], by[i]);
+		for (i in 0...sub.length ) {
+			if (sub[i] == null) continue;
+			s = StringTools.replace(s+' ', sub[i], by[i]);
+			
 		}
-		return s;
+		return StringTools.trim(s);
 	}
 	
 	public static function parseInt(s:String, defaultVal:Int):Int{
@@ -62,7 +64,7 @@ class Util {
 	 * @link http://devpro.it/examples/php_js_escaping.php
 	 */
 	public static function convertToUriComponentEncoding(encodedValue:String) : String {
-		return stringReplaceArray(encodedValue,[ '%21', '%2A', '%27', '%28', '%29' ], [ '!', '*', "'", '(', ')' ]);
+		return stringReplaceArray(encodedValue, [ '!', '*', "'", '(', ')', ' ', '+' ],[ '%21', '%2A', '%27', '%28', '%29' , '%20', '%20']);
 	}
 	
 	/**
@@ -83,13 +85,15 @@ class Util {
 		var leftMost7;
 		if(string != null && string != '') {
 			hash = 0;
-			for(pos in (string.length - 1)...0) {
+			var pos:Int = string.length - 1;
+			while(pos >= 0) {
 				current   = string.charCodeAt(pos);
 				hash      = ((hash << 6) & 0xfffffff) + current + (current << 14);
 				leftMost7 = hash & 0xfe00000;
 				if(leftMost7 != 0) {
 					hash ^= leftMost7 >> 21;
 				}
+				pos--;
 			}
 		}
 		

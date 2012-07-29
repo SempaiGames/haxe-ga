@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package  googleAnalytics.internals.request;
@@ -31,6 +31,7 @@ import googleAnalytics.Tracker;
 import googleAnalytics.Visitor;
 import googleAnalytics.Session;
 import googleAnalytics.CustomVariable;
+import haxe.Http;
 
 import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.internals.Util;
@@ -58,9 +59,9 @@ class Request extends HttpRequest {
 	 * @deprecated
 	 */
 	static inline public var TYPE_CUSTOMVARIABLE = 'var';
-	static inline public var X10_CUSTOMVAR_NAME_PROJECT_ID  = 8;
-	static inline public var X10_CUSTOMVAR_VALUE_PROJECT_ID = 9;
-	static inline public var X10_CUSTOMVAR_SCOPE_PROJECT_ID = 11;
+	static inline public var X10_CUSTOMVAR_NAME_PROJECT_ID  = '8';
+	static inline public var X10_CUSTOMVAR_VALUE_PROJECT_ID = '9';
+	static inline public var X10_CUSTOMVAR_SCOPE_PROJECT_ID = '11';
 	static inline public var CAMPAIGN_DELIMITER = '|';
 	
 	/**
@@ -71,29 +72,23 @@ class Request extends HttpRequest {
 	 */
 	private function getType() : String { return null; }
 	
-	override private function buildHttpRequest() : String {
-		this.setXForwardedFor(this.visitor.getIpAddress());
-		this.setUserAgent(this.visitor.getUserAgent());
-		
+	override private function buildHttpHeadersAndData(http:Http) {
 		// Increment session track counter for each request
 		this.session.increaseTrackCount();
-		
 		// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Configuration.as?r=237#48
 		// and http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/eventTrackerGuide.html#implementationConsiderations
 		if(this.session.getTrackCount() > 500) {
 			Tracker._raiseError('Google Analytics does not guarantee to process more than 500 requests per session.', 'Request.buildHttpRequest');
 		}
-		
 		if(this.tracker.getCampaign()!=null) {
 			this.tracker.getCampaign().increaseResponseCount();
 		}
-		
-		return super.buildHttpRequest();
+		super.buildHttpHeadersAndData(http);
 	}
 	
 	override private function buildParameters() : ParameterHolder {
 		var p:ParameterHolder = new ParameterHolder();
-		
+
 		p.utmac = this.tracker.getAccountId();
 		p.utmhn = this.tracker.getDomainName();
 		
@@ -102,14 +97,8 @@ class Request extends HttpRequest {
 		
 		// The "utmip" parameter is only relevant if a mobile analytics
 		// ID (MO-123456-7) was given,
-		// see http://code.google.com/p/php-ga/issues/detail?id=9
+		// see https://github.com/fbricker/haxe-ga/issues/detail?id=9
 		p.utmip = this.visitor.getIpAddress();
-		
-		p.aip = Tracker.getConfig().getAnonymizeIpAddresses() ? 1 : null;
-		if(p.aip!=null) {
-			// Anonymize last IP block
-			p.utmip = p.utmip.substr(0, p.utmip.lastIndexOf('.')) + '.0';
-		}
 		
 		p.utmhid = this.session.getSessionId();
 		p.utms   = this.session.getTrackCount();
@@ -118,25 +107,23 @@ class Request extends HttpRequest {
 		p = this.buildCustomVariablesParameter(p);
 		p = this.buildCampaignParameters(p);
 		p = this.buildCookieParameters(p);
-		
+
 		return p;
 	}
 	
 	private function buildVisitorParameters(p:ParameterHolder) : ParameterHolder {
 		// Ensure correct locale format, see https://developer.mozilla.org/en/navigator.language
-		p.utmul = StringTools.replace(this.visitor.getLocale(),'_', '-').toLowerCase();
-		
+		if(visitor.getLocale()!=null){
+			p.utmul = StringTools.replace(visitor.getLocale(), '_', '-').toLowerCase();
+		}
 		if(this.visitor.getFlashVersion() != null) {
 			p.utmfl = this.visitor.getFlashVersion();
 		}
-		if(this.visitor.getJavaEnabled() != null) {
-			p.utmje = this.visitor.getJavaEnabled()?'1':'0';
-		}
+		p.utmje = this.visitor.getJavaEnabled()?'1':'0';
 		if(this.visitor.getScreenColorDepth() != null) {
 			p.utmsc = this.visitor.getScreenColorDepth() + '-bit';
 		}
-		p.utmsr = this.visitor.getScreenResolution();
-		
+		p.utmsr = this.visitor.getScreenResolution();		
 		return p;
 	}
 	
@@ -167,7 +154,7 @@ class Request extends HttpRequest {
 			
 			x10.setKey(/*self.*/X10_CUSTOMVAR_NAME_PROJECT_ID, customVar.getIndex(), name);
 			x10.setKey(/*self.*/X10_CUSTOMVAR_VALUE_PROJECT_ID, customVar.getIndex(), value);
-			if(customVar.getScope() != null && customVar.getScope() != CustomVariable.SCOPE_PAGE) {
+			if(customVar.getScope() != CustomVariable.SCOPE_PAGE) {
 				x10.setKey(/*self.*/X10_CUSTOMVAR_SCOPE_PROJECT_ID, customVar.getIndex(), customVar.getScope());
 			}
 		}
@@ -183,16 +170,16 @@ class Request extends HttpRequest {
 		var domainHash = this.generateDomainHash();
 		p.__utma  = domainHash + '.';
 		p.__utma += this.visitor.getUniqueId() + '.';
-		p.__utma += this.visitor.getFirstVisitTime().format('U') + '.';
-		p.__utma += this.visitor.getPreviousVisitTime().format('U') + '.';
-		p.__utma += this.visitor.getCurrentVisitTime().format('U') + '.';
+		p.__utma += this.visitor.getFirstVisitTime().toString() + '.';
+		p.__utma += this.visitor.getPreviousVisitTime().toString() + '.';
+		p.__utma += this.visitor.getCurrentVisitTime().toString() + '.';
 		p.__utma += this.visitor.getVisitCount();
 		
 		p.__utmb  = domainHash + '.';
 		p.__utmb += this.session.getTrackCount() + '.';
 		// FIXME: What does "token" mean? I only encountered a value of 10 in my tests.
 		p.__utmb += 10 + '.';
-		p.__utmb += this.session.getStartTime().format('U');
+		p.__utmb += this.session.getStartTime().toString();
 		
 		p.__utmc = domainHash;
 		
@@ -211,7 +198,7 @@ class Request extends HttpRequest {
 		var campaign = this.tracker.getCampaign();
 		if (campaign == null) return p;
 		p.__utmz  = this.generateDomainHash() + '.';
-		p.__utmz += campaign.getCreationTime().format('U') + '.';
+		p.__utmz += campaign.getCreationTime().toString() + '.';
 		p.__utmz += this.visitor.getVisitCount() + '.';
 		p.__utmz += campaign.getResponseCount() + '.';
 		
@@ -234,11 +221,9 @@ class Request extends HttpRequest {
 	 */
 	private function generateDomainHash() : Int {
 		var hash:Int = 1;
-		
-		if(this.tracker.getAllowHash()) {
+		if (this.tracker.getAllowHash()) {
 			hash = Util.generateHash(this.tracker.getDomainName());
 		}
-		
 		return hash;
 	}
 	

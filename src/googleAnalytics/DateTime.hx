@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,26 +17,27 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
 
 class DateTime {
-	private var date : Date;
+	private var date : String;
 	public function new(current:String = null) {
-		if(current==null) {
-			date = Date.now();
+		if (current == null) {
+			
+			date = Math.round(Date.now().getTime())+'';
 		}else {
-			date = Date.fromString(current);
+			date = current;
 		}
 	}
 	
-	public function format(fmt:String):String {
-		return DateTools.format(date, fmt);
+	public function toString():String{
+		return date;
 	}
 }

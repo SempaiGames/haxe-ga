@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
@@ -103,15 +103,7 @@ class Config {
 	 * @see internals.request.HttpRequest::send()
 	 */
 	private var endPointPath : String = '/__utm.gif';
-	
-	/**
-	 * Whether to anonymize IP addresses within Google Analytics by stripping
-	 * the last IP address block, will be mapped to "aip" parameter
-	 * @see internals.ParameterHolder::$aip
-	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApi_gat.html#_gat._anonymizeIp
-	 */
-	private var anonymizeIpAddresses : Bool = false;
-	
+		
 	/**
 	 * Defines a new sample set size (0-100) for Site Speed data collection.
 	 * By default, a fixed 1% sampling of your site visitors make up the data pool from which
@@ -194,14 +186,6 @@ class Config {
 	
 	public function setEndPointPath(endPointPath:String) {
 		this.endPointPath = endPointPath;
-	}
-	
-	public function getAnonymizeIpAddresses() : Bool {
-		return this.anonymizeIpAddresses;
-	}
-	
-	public function setAnonymizeIpAddresses(anonymizeIpAddresses:Bool) {
-		this.anonymizeIpAddresses = anonymizeIpAddresses;
 	}
 	
 	public function getSitespeedSampleRate() : Int {

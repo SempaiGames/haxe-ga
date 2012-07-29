@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
@@ -66,11 +66,11 @@ class CustomVariable {
 	/**
 	 * @param scope See SCOPE_* constants
 	 */
-	public function new(index:Int=null, name:String=null, value:Dynamic=null, scope:Int=null) {
-		if(index != null) this.setIndex(index);
+	public function new(index:Int=0, name:String=null, value:Dynamic=null, scope:Int=0) {
+		if(index != 0) this.setIndex(index);
 		if(name  != null) this.setName(name);
 		if(value != null) this.setValue(value);
-		if(scope != null) this.setScope(scope);
+		if(scope != 0) this.setScope(scope);
 	}
 	
 	public function validate() : Void {

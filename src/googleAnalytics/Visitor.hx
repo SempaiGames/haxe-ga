@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package googleAnalytics;
@@ -119,13 +119,13 @@ class Visitor {
 	/**
 	 * Creates a new visitor without any previous visit information.
 	 */
-	function __construct() {
+	public function new() {
 		// ga.js sets all three timestamps to now for new visitors, so we do the same
 		var now = new DateTime();
+		this.uniqueId = 0;
 		this.setFirstVisitTime(now);
 		this.setPreviousVisitTime(now);
-		this.setCurrentVisitTime(now);
-		
+		this.setCurrentVisitTime(now);		
 		this.setVisitCount(1);
 	}
 	
@@ -137,7 +137,7 @@ class Visitor {
 	 * @see internals.request\Request::buildCookieParameters()
 	 * @return $this
 	 */
-	function fromUtma(value:String) {
+	public function fromUtma(value:String) {
 		var parts : Array<String> = value.split('.');
 		if(parts.length != 6) {
 			Tracker._raiseError('The given "__utma" cookie value is invalid.', 'Visitor.fromUtma');
@@ -189,7 +189,7 @@ class Visitor {
 	 * user-specific information as possible.
 	 */
 	public function getUniqueId() : Int {
-		if(this.uniqueId == null) {
+		if(this.uniqueId == 0) {
 			this.uniqueId = this.generateUniqueId();
 		}
 		return this.uniqueId;

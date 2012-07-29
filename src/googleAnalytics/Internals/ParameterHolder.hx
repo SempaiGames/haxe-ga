@@ -1,5 +1,5 @@
 /**
- * Generic Server-Side Google Analytics PHP Client
+ * Generic Server-Side Google Analytics Haxe Client
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,11 +17,11 @@
  * 
  * Google Analytics is a registered trademark of Google Inc.
  * 
- * @link      http://code.google.com/p/php-ga
+ * @link      https://github.com/fbricker/haxe-ga
  * 
  * @license   http://www.gnu.org/licenses/lgpl.html
- * @author    Thomas Bachem <tb@unitedprototype.com>
- * @copyright Copyright (c) 2010 United Prototype GmbH (http://unitedprototype.com)
+ * @author    Federico Bricker <fbricker@gmail.com>
+ * @copyright Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
  */
 
 package  googleAnalytics.internals;
@@ -87,13 +87,7 @@ class ParameterHolder {
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEventTracking.html
 	 */
 	public var utmni : Int;
-	
-	/**
-	 * Whether to anonymize IP addresses within Google Analytics by stripping
-	 * the last IP address block, either null or 1
-	 */
-	public var aip : Int;
-	
+		
 	/**
 	 * Used for GA-internal statistical client function usage and error tracking,
 	 * not implemented in php-ga as of now, but here for documentation completeness.
@@ -428,11 +422,10 @@ class ParameterHolder {
 	 * Converts this parameter holder to a pure PHP array, filtering out all properties
 	 * prefixed with an underscore ("_").
 	 */
-	public function toArray() : Hash<String> {
+	public function toHashTable() : Hash<String> {
 		var hash = new Hash<String>();
 		var property:String;
-		for (property in Type.getInstanceFields(Main)) {
-			trace(property);
+		for (property in Type.getInstanceFields(ParameterHolder)) {
 			if (property.charAt(0) != '_' && !Reflect.isFunction(Reflect.field(this,property))) {
 				hash.set(property, Reflect.field(this, property));
 			}
@@ -440,9 +433,20 @@ class ParameterHolder {
 		return hash;
 	}
 	
+	public function toQueryString() : String {
+		var qs : String = '';
+		var property:String;
+		for (property in Type.getInstanceFields(ParameterHolder)) {
+			if (property.charAt(0) != '_' && !Reflect.isFunction(Reflect.field(this, property)) && Reflect.field(this, property) != null && Reflect.field(this, property) != 'null' ) {
+				qs += property + '=' + StringTools.replace(Reflect.field(this, property)+'', '&', '%26') + '&';
+			}
+		}
+		return qs;
+	}	
+	
 	public function new() {
 		utmwv = googleAnalytics.Tracker.VERSION;
-		utmr=utmcs=utmfl=utmje= '-';
+		utmr=utmcs=utmfl=utmje= '0';
 	}
 	
 }
