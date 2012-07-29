@@ -98,6 +98,9 @@ class HttpRequest {
 		buildHttpHeadersAndData(request);
 		#if (neko||php||cpp||cs||java)
 			request.cnxTimeout(config.getRequestTimeout());
+		#elseif flash
+			// we must load GoogleAnalytics using Flash API (like loading an image to avoid the check 
+			// of a crossdomain.xml
 		#end
 		request.onError = onError;
 		request.request(false);
