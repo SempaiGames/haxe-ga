@@ -33,24 +33,17 @@ import googleAnalytics.internals.ParameterHolder;
 
 class ItemRequest extends Request {
 	
-	/**
-	 * @var googleAnalytics.Item
-	 */
-	private var item : googleAnalytics;
+	private var item : Item;
 	
-	
-	/**
-	 */
-	private function getType() : String {
+	override private function getType() : String {
 		return Request.TYPE_ITEM;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/ecommerce/Item.as#61
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : googleAnalytics {
-		p = super.buildParameters();		
+	override private function buildParameters() : ParameterHolder {
+		var p = super.buildParameters();		
 		
 		p.utmtid = this.item.getOrderId();
 		p.utmipc = this.item.getSku();
@@ -65,34 +58,24 @@ class ItemRequest extends Request {
 	/**
 	 * The GA Javascript client doesn't send any visitor information for
 	 * e-commerce requests, so we don't either.
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
+	override private function buildVisitorParameters(p:ParameterHolder) : ParameterHolder {
 		return p;
 	}
 	
 	/**
 	 * The GA Javascript client doesn't send any custom variables for
 	 * e-commerce requests, so we don't either.
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
+	override private function buildCustomVariablesParameter(p:ParameterHolder) : ParameterHolder {
 		return p;
 	}
 	
-	/**
-	 * @return googleAnalytics.Item
-	 */
-	function getItem() : googleAnalytics {
+	public function getItem() : Item {
 		return this.item;
 	}
 	
-	/**
-	 * @param googleAnalytics.Item $item
-	 */
-	function setItem(item:Item) {
+	public function setItem(item:Item) {
 		this.item = item;
 	}
 	

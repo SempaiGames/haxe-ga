@@ -26,11 +26,17 @@
 
 package googleAnalytics;
 
-/**
- * @see Config::$errorSeverity
- * @see Tracker::_raiseError()
- */
-
- class Exception extends EventException {
+class DateTime {
+	private var date : Date;
+	public function new(current:String = null) {
+		if(current==null) {
+			date = Date.now();
+		}else {
+			date = Date.fromString(current);
+		}
+	}
 	
+	public function format(fmt:String):String {
+		return DateTools.format(date, fmt);
+	}
 }

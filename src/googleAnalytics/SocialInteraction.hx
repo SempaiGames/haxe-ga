@@ -54,53 +54,39 @@ class SocialInteraction {
 	private var target : String;
 	
 	
-	/**
-	 */
-	function __construct(network=null, action=null, target=null) {
-		if(network !== null) this.setNetwork(network);
-		if(action  !== null) this.setAction(action);
-		if(target  !== null) this.setTarget(target);
+	public function __construct(network=null, action=null, target=null) {
+		if(network != null) this.setNetwork(network);
+		if(action  != null) this.setAction(action);
+		if(target  != null) this.setTarget(target);
 	}
 	
-	function validate() : Void {
-		if(this.network === null || this.action === null) {
-			Tracker._raiseError('Social interactions need to have at least the "network" and "action" attributes defined.', __METHOD__);
+	public function validate() : Void {
+		if(this.network == null || this.action == null) {
+			Tracker._raiseError('Social interactions need to have at least the "network" and "action" attributes defined.', 'SocialInteraction.validate');
 		}
 	}
 	
-	/**
-	 */
-	function setNetwork(network:String) {
+	public function setNetwork(network:String) {
 		this.network = network;
 	}
 	
-	/**
-	 */
-	function getNetwork() : String {
+	public function getNetwork() : String {
 		return this.network;
 	}
 	
-	/**
-	 */
-	function setAction(action:String) {
+	public function setAction(action:String) {
 		this.action = action;
 	}
 	
-	/**
-	 */
-	function getAction() : String {
+	public function getAction() : String {
 		return this.action;
 	}
 	
-	/**
-	 */
-	function setTarget(target:String) {
+	public function setTarget(target:String) {
 		this.target = target;
 	}
 	
-	/**
-	 */
-	function getTarget() : String {
+	public function getTarget() : String {
 		return this.target;
 	}
 	

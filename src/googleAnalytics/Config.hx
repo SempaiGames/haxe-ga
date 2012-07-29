@@ -49,9 +49,9 @@ class Config {
 	 */
 	static inline public var ERROR_SEVERITY_SILENCE    = 0;
 	/**
-	 * Trigger PHP errors with a E_USER_WARNING error level.
+	 * Trigger PHP errors with a E_USER_TRACE error level.
 	 */
-	static inline public var ERROR_SEVERITY_WARNINGS   = 1;
+	static inline public var ERROR_SEVERITY_TRACE   = 1;
 	/**
 	 * Throw googleAnalytics.Exception exceptions.
 	 */
@@ -121,7 +121,7 @@ class Config {
 	 */
 	private var sitespeedSampleRate : Int = 1;
 		
-	function Config() {
+	public function new() {
 		/*for(property => value in properties) {
 			// PHP doesn't care about case in method names
 			setterMethod = 'set' + property;
@@ -129,89 +129,90 @@ class Config {
 			if(Reflect.hasMethod(Type.resolveClass_getClass(this), setterMethod)) {
 				this.setterMethod(value);
 			} else {
-				return Tracker._raiseError('There is no setting "' + property + '".', __METHOD__);
+				return Tracker._raiseError('There is no setting "' + property + '".', 'Config.new');
 			}
-		}/*
+		}*/
 	}
 	
 	/**
 	 * @return int See self::ERROR_SEVERITY_* constants
 	 */
-	function getErrorSeverity() : Int {
+	public function getErrorSeverity() : Int {
 		return this.errorSeverity;
 	}
 	
 	/**
 	 * @param errorSeverity See self::ERROR_SEVERITY_* constants
 	 */
-	function setErrorSeverity(errorSeverity:Int) {
+	public function setErrorSeverity(errorSeverity:Int) {
 		this.errorSeverity = errorSeverity;
 	}
-	
-	function getSendOnShutdown() : Bool {
+
+	public function getSendOnShutdown() : Bool {
 		return this.sendOnShutdown;
 	}
 	
-	function setSendOnShutdown(sendOnShutdown:Bool) {
+	public function setSendOnShutdown(sendOnShutdown:Bool) {
 		this.sendOnShutdown = sendOnShutdown;
 	}
 	
-	function getFireAndForget() : Bool {
+	public function getFireAndForget() : Bool {
 		return this.fireAndForget;
 	}
 	
-	function setFireAndForget(fireAndForget:Bool) {
+	public function setFireAndForget(fireAndForget:Bool) {
 		this.fireAndForget = fireAndForget;
 	}
 	
-	function getLoggingCallback() : Dynamic {
+	public function getLoggingCallback() : Dynamic {
 		return this.loggingCallback;
 	}
 	
-	function setLoggingCallback(cb:Dynamic) {
+	public function setLoggingCallback(cb:Dynamic) {
 		this.loggingCallback = cb;
 	}
 	
-	function getRequestTimeout() : Float {
+	public function getRequestTimeout() : Float {
 		return this.requestTimeout;
 	}
 	
-	function setRequestTimeout(requestTimeout:Float) {
+	public function setRequestTimeout(requestTimeout:Float) {
 		this.requestTimeout = requestTimeout;
 	}
 	
-	function getEndPointHost() : String {
+	public function getEndPointHost() : String {
 		return this.endPointHost;
 	}
-	
-	function setEndPointHost(endPointHost:String) {
+
+	public function setEndPointHost(endPointHost:String) {
 		this.endPointHost = endPointHost;
 	}
 	
-	function getEndPointPath() : String {
+	public function getEndPointPath() : String {
 		return this.endPointPath;
 	}
 	
-	function setEndPointPath(endPointPath:String) {
+	public function setEndPointPath(endPointPath:String) {
 		this.endPointPath = endPointPath;
 	}
 	
-	function getAnonymizeIpAddresses() : Bool {
+	public function getAnonymizeIpAddresses() : Bool {
 		return this.anonymizeIpAddresses;
 	}
 	
-	function setAnonymizeIpAddresses(anonymizeIpAddresses:Bool) {
+	public function setAnonymizeIpAddresses(anonymizeIpAddresses:Bool) {
 		this.anonymizeIpAddresses = anonymizeIpAddresses;
 	}
 	
-	function getSitespeedSampleRate() : Int {
+	public function getSitespeedSampleRate() : Int {
 		return this.sitespeedSampleRate;
 	}
 	
-	function setSitespeedSampleRate(sitespeedSampleRate:Int) {
+	public function setSitespeedSampleRate(sitespeedSampleRate:Int) {
 		if(sitespeedSampleRate < 0 || sitespeedSampleRate > 100) {
-			return Tracker._raiseError('For consistency with ga.js, sample rates must be specified as a number between 0 and 100.', __METHOD__);
+			Tracker._raiseError('For consistency with ga.js, sample rates must be specified as a number between 0 and 100.', 'config.setSitespeedSampleRate');
+			return;
 		}
 		this.sitespeedSampleRate = sitespeedSampleRate;
-	}
+	}	
 }

@@ -34,115 +34,87 @@ package  googleAnalytics.internals;
 
 class X10 {
 	
-	/**
-	 */
-	private var projectData : NativeArray = [];
-	
-	
-	/**
-	 */
-	private var KEY : String = 'k';
-	
-	/**
-	 */
-	private var VALUE : String = 'v';
-	
-	/**
-	 */
-	private var SET : NativeArray = [ 'k', 'v' ];
+	private var projectData : Hash<Array<Array<String>>>;
+	private var KEY : String;
+	private var VALUE : String;
+	private var SET : Array<String>;
 	
 	/**
 	 * Opening delimiter for wrapping a set of values belonging to the same type.
 	 */
-	private var DELIM_BEGIN : String = '(';
+	private var DELIM_BEGIN : String;
 	
 	/**
 	 * Closing delimiter for wrapping a set of values belonging to the same type.
 	 */
-	private var DELIM_END : String   = ')';
+	private var DELIM_END : String;
 	
 	/**
 	 * Delimiter between two consecutive num/value pairs.
 	 */
-	private var DELIM_SET : String = '*';
+	private var DELIM_SET : String;
 	
 	/**
 	 * Delimiter between a num and its corresponding value.
 	 */
-	private var DELIM_NUM_VALUE : String = '!';
+	private var DELIM_NUM_VALUE : String;
 	
 	/**
 	 * Mapping of escapable characters to their escaped forms.
 	 */
-	private var ESCAPE_CHAR_MAP : NativeArray = [ 
-		"'" => "'0",
-		')' => "'1",
-		'*' => "'2",
-		'!' => "'3",
-	 ];
+	private var ESCAPE_CHAR_MAP : Hash<String>;
 	
-	/**
-	 */
-	private var MINIMUM : Int = 1;
+	private var MINIMUM : Int;
+	
+	public function new() {
+		projectData = new Array();
+		KEY = 'k';
+		VALUE = 'v';
+		SET = [ 'k', 'v' ];
+		DELIM_BEGIN = '(';
+		DELIM_END = ')';
+		DELIM_SET = '*';
+		DELIM_NUM_VALUE = '!';
+		MINIMUM = 1;
+		ESCAPE_CHAR_MAP = new Hash<String>();
+		ESCAPE_CHAR_MAP.set('\'', '\'0');
+		ESCAPE_CHAR_MAP.set(')' , '\'1');
+		ESCAPE_CHAR_MAP.set('*' , '\'2');
+		ESCAPE_CHAR_MAP.set('!' , '\'3');
+	}
 	
 	
-	/**
-	 * @const int
-	 */
+	
 	static inline public var OBJECT_KEY_NUM  = 1;
-	/**
-	 * @const int
-	 */
 	static inline public var TYPE_KEY_NUM    = 2;
-	/**
-	 * @const int
-	 */
 	static inline public var LABEL_KEY_NUM   = 3;
-	/**
-	 * @const int
-	 */
 	static inline public var VALUE_VALUE_NUM = 1;
 	
-	
-	/**
-	 */
 	private function hasProject(projectId:Int) : Bool {
 		return isset(this.projectData[projectId]);
 	}
 	
-	/**
-	 */
-	function setKey(projectId:Int, num:Int, value:Dynamic) {
+	public function setKey(projectId:Int, num:Int, value:Dynamic) {
 		this.setInternal(projectId, this.KEY, num, value);
 	}
 	
-	/**
-	 */
-	function getKey(projectId:Int, num:Int) : Dynamic {
+	public function getKey(projectId:Int, num:Int) : Dynamic {
 		return this.getInternal(projectId, this.KEY, num);
 	}
 	
-	/**
-	 */
-	function clearKey(projectId:Int) {
+	public function clearKey(projectId:Int) {
 		this.clearInternal(projectId, this.KEY);
 	}
 	
-	/**
-	 */
-	function setValue(projectId:Int, num:Int, value:Dynamic) {
+	public function setValue(projectId:Int, num:Int, value:Dynamic) {
 		this.setInternal(projectId, this.VALUE, num, value);
 	}
 	
-	/**
-	 */
-	function getValue(projectId:Int, num:Int) : Dynamic {
+	public function getValue(projectId:Int, num:Int) : Dynamic {
 		return this.getInternal(projectId, this.VALUE, num);
 	}
 	
-	/**
-	 */
-	function clearValue(projectId:Int) {
+	public function clearValue(projectId:Int) {
 		this.clearInternal(projectId, this.VALUE);
 	}
 	
@@ -187,10 +159,8 @@ class X10 {
 	 */
 	private function escapeExtensibleValue(value:String) : String {
 		result = '';
-		
-		value = (string)value;
 		length = value.length;
-		for(i = 0; i < length; i++) {
+		for(i in 0...length-1) {
 			char = value[i];
 			
 			if(isset(this.ESCAPE_CHAR_MAP[char])) {
@@ -206,12 +176,12 @@ class X10 {
 	/**
 	 * Given a data array for a certain type, render its string encoding.
 	 */
-	private function renderDataType() : String {
-		result = [];
-		
-		lastI = 0;
+	private function renderDataType(data:Array<String>) : String {
+		var result:Array<String> = new Array<String>();
+		var lastI:Int = 0;
 		ksort(data, SORT_NUMERIC);
-		for(i => entry in data) {
+		for (i in 0...data.length - 1) {
+			var entry = data[i];
 			if(isset(entry)) {
 				str = '';
 				
@@ -223,7 +193,7 @@ class X10 {
 				}
 	
 				str += this.escapeExtensibleValue(entry);
-				result[] = str;
+				result.push(str);
 			}
 			
 			lastI = i;
@@ -235,7 +205,7 @@ class X10 {
 	/**
 	 * Given a project array, render its string encoding.
 	 */
-	private function renderProject() : String {
+	private function renderProject(project:Array<Array<String>>) : String {
 		result = '';
 	
 		// Do we need to output the type string? As an optimization we do not
@@ -244,7 +214,7 @@ class X10 {
 		needTypeQualifier = false;
 		
 		length = this.SET.length;
-		for(i = 0; i < length; i++) {
+		for(i in 0...length) {
 			if(isset(project[this.SET[i]])) {
 				data = project[this.SET[i]];
 				
@@ -264,13 +234,11 @@ class X10 {
 	/**
 	 * Generates the URL parameter string for the current internal extensible data state.
 	 */
-	function renderUrlString() : String {
+	public function renderUrlString() : String {
 		result = '';
-		
-		for(projectId => project in this.projectData) {
-			result += projectId + this.renderProject(project);
-		}
-		
+		for(projectId in this.projectData.keys) {
+			result += projectId + this.renderProject(this.projectData.get(projectId));
+		}		
 		return result;
 	}
 	

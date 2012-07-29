@@ -42,7 +42,7 @@ class ParameterHolder {
 	/**
 	 * Google Analytics client version, e.g. "4.7.2"
 	 */
-	public var utmwv : String = Tracker.VERSION;
+	public var utmwv : String;
 	
 	/**
 	 * Google Analytics account ID, e.g. "UA-1234567-8"
@@ -117,13 +117,13 @@ class ParameterHolder {
 	/**
 	 * Charset encoding (e.g. "UTF-8") or "-" as default
 	 */
-	public var utmcs : String = '-';
+	public var utmcs : String;
 	
 	/**
 	 * Referer URL, e.g. "http://www.example.com/path/page.html", "-" as default
 	 * or "0" for internal referers
 	 */
-	public var utmr : String = '-';
+	public var utmr : String;
 	
 	
 	// - - - - - - - - - - - - - - - - - Visitor parameters - - - - - - - - - - - - - - - - -
@@ -143,13 +143,12 @@ class ParameterHolder {
 	/**
 	 * Visitor's Flash version, e.g. "9.0 r28" or "-" as default
 	 */
-	public var utmfl : String = '-';
+	public var utmfl : String;
 	
 	/**
 	 * Visitor's Java support, either 0 or 1 or "-" as default
-	 * @var int|string
 	 */
-	public var utmje : Int = '-';
+	public var utmje : String;
 	
 	/**
 	 * Visitor's screen color depth, e.g. "32-bit"
@@ -175,7 +174,7 @@ class ParameterHolder {
 	 * __utma=<domainHash>.<uniqueId>.<firstTime>.<lastTime>.<currentTime>.<sessionCount>
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/data/UTMA.as
 	 */
-	public var __utma : Int;
+	public var __utma : String;
 	
 	
 	// - - - - - - - - - - - - - - - - - Session parameters - - - - - - - - - - - - - - - - -
@@ -220,7 +219,7 @@ class ParameterHolder {
 	 * __utmc=<domainHash>
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/data/UTMC.as
 	 */
-	public var __utmc : String;
+	public var __utmc : Int;
 	
 	
 	// - - - - - - - - - - - - - - - - - E-Commerce parameters - - - - - - - - - - - - - - - - -
@@ -429,14 +428,21 @@ class ParameterHolder {
 	 * Converts this parameter holder to a pure PHP array, filtering out all properties
 	 * prefixed with an underscore ("_").
 	 */
-	function toArray() : NativeArray {
-		array = [];
-		for(property => value in this) {
-			if(property[0] != '_') {
-				array[property] = value;
+	public function toArray() : Hash<String> {
+		var hash = new Hash<String>();
+		var property:String;
+		for (property in Type.getInstanceFields(Main)) {
+			trace(property);
+			if (property.charAt(0) != '_' && !Reflect.isFunction(Reflect.field(this,property))) {
+				hash.set(property, Reflect.field(this, property));
 			}
 		}
-		return array;
+		return hash;
+	}
+	
+	public function new() {
+		utmwv = googleAnalytics.Tracker.VERSION;
+		utmr=utmcs=utmfl=utmje= '-';
 	}
 	
 }

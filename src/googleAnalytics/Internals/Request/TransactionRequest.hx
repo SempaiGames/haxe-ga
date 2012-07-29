@@ -33,24 +33,17 @@ import googleAnalytics.internals.ParameterHolder;
 
 class TransactionRequest extends Request {
 	
-	/**
-	 * @var googleAnalytics.Transaction
-	 */
-	private var transaction : googleAnalytics;
+	private var transaction : Transaction;
 	
-	
-	/**
-	 */
-	private function getType() : String {
+	override private function getType() : String {
 		return Request.TYPE_TRANSACTION;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/ecommerce/Transaction.as#76
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : googleAnalytics {
-		p = super.buildParameters();
+	override private function buildParameters() : ParameterHolder {
+		var p = super.buildParameters();
 		
 		p.utmtid = this.transaction.getOrderId();
 		p.utmtst = this.transaction.getAffiliation();
@@ -67,34 +60,24 @@ class TransactionRequest extends Request {
 	/**
 	 * The GA Javascript client doesn't send any visitor information for
 	 * e-commerce requests, so we don't either.
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
+	override private function buildVisitorParameters(p:ParameterHolder) : ParameterHolder {
 		return p;
 	}
 	
 	/**
 	 * The GA Javascript client doesn't send any custom variables for
 	 * e-commerce requests, so we don't either.
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
+	override private function buildCustomVariablesParameter(p:ParameterHolder) : ParameterHolder {
 		return p;
 	}
 	
-	/**
-	 * @return googleAnalytics.Transaction
-	 */
-	function getTransaction() : googleAnalytics {
+	public function getTransaction() : Transaction {
 		return this.transaction;
 	}
 	
-	/**
-	 * @param googleAnalytics.Transaction $transaction
-	 */
-	function setTransaction(transaction:Transaction) {
+	public function setTransaction(transaction:Transaction) {
 		this.transaction = transaction;
 	}
 	

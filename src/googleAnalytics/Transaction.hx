@@ -83,45 +83,37 @@ class Transaction {
 	
 	/**
 	 * @see Transaction::addItem()
-	 * @var googleAnalytics.Item[]
 	 */
-	private var items : googleAnalytics = [];
+	private var items : Hash<Item>;
 	
+	public function new() {
+		items = new Hash<Item>();
+	}
 	
-	function validate() : Void {
-		if(!this.items) {
-			Tracker._raiseError('Transactions need to consist of at least one item.', __METHOD__);
+	public function validate() : Void {
+		if(this.items==null) {
+			Tracker._raiseError('Transactions need to consist of at least one item.', 'Transaction.validate');
 		}
 	}
 	
 	/**
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiEcommerce.html#_gat.GA_Tracker_._addItem
-	 * @param googleAnalytics.Item $item
 	 */
-	function addItem(item:Item) {
+	public function addItem(item:Item) {
 		// Associated items inherit the transaction's order ID
 		item.setOrderId(this.orderId);
-		
-		sku = item.getSku();
-		this.items[sku] = item;
+		items.set(item.getSku(),item);
 	}
 	
-	/**
-	 * @return googleAnalytics.Item[]
-	 */
-	function getItems() : googleAnalytics {
+	public function getItems() : Hash<Item> {
 		return this.items;
 	}
 	
-	/**
-	 */
-	function getOrderId() : String {
+	public function getOrderId() : String {
 		return this.orderId;
 	}
 	
-	/**
-	 */
-	function setOrderId(orderId:String) {
+	public function setOrderId(orderId:String) {
 		this.orderId = orderId;
 		
 		// Update order IDs of all associated items too
@@ -130,87 +122,59 @@ class Transaction {
 		}
 	}
 	
-	/**
-	 */
-	function getAffiliation() : String {
+	public function getAffiliation() : String {
 		return this.affiliation;
 	}
 	
-	/**
-	 */
-	function setAffiliation(affiliation:String) {
+	public function setAffiliation(affiliation:String) {
 		this.affiliation = affiliation;
 	}
 	
-	/**
-	 */
-	function getTotal() : Float {
+	public function getTotal() : Float {
 		return this.total;
 	}
 	
-	/**
-	 */
-	function setTotal(total:Float) {
+	public function setTotal(total:Float) {
 		this.total = total;
 	}
 	
-	/**
-	 */
-	function getTax() : Float {
+	public function getTax() : Float {
 		return this.tax;
 	}
 	
-	/**
-	 */
-	function setTax(tax:Float) {
+	public function setTax(tax:Float) {
 		this.tax = tax;
 	}
 	
-	/**
-	 */
-	function getShipping() : Float {
+	public function getShipping() : Float {
 		return this.shipping;
 	}
 	
-	/**
-	 */
-	function setShipping(shipping:Float) {
+	public function setShipping(shipping:Float) {
 		this.shipping = shipping;
 	}
 	
-	/**
-	 */
-	function getCity() : String {
+	public function getCity() : String {
 		return this.city;
 	}
 	
-	/**
-	 */
-	function setCity(city:String) {
+	public function setCity(city:String) {
 		this.city = city;
 	}
 	
-	/**
-	 */
-	function getRegion() : String {
+	public function getRegion() : String {
 		return this.region;
 	}
 	
-	/**
-	 */
-	function setRegion(region:String) {
+	public function setRegion(region:String) {
 		this.region = region;
 	}
 	
-	/**
-	 */
-	function getCountry() : String {
+	public function getCountry() : String {
 		return this.country;
 	}
 	
-	/**
-	 */
-	function setCountry(country:String) {
+	public function setCountry(country:String) {
 		this.country = country;
 	}
 	

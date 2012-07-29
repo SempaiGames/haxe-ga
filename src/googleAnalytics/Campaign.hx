@@ -26,8 +26,8 @@
 
 package googleAnalytics;
 
+import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.internals.Util;
-import DateTime;
 
 /**
  * You should serialize this object and store it in e.g. the user database to keep it
@@ -132,9 +132,10 @@ class Campaign {
 	 * @see createFromReferrer
 	 * @param type See TYPE_* constants
 	 */
-	function __construct(type:String) {
-		if(!in_array(type, [ /*self.*/TYPE_DIRECT, /*self.*/TYPE_ORGANIC, /*self.*/TYPE_REFERRAL ])) {
-			Tracker._raiseError('Campaign type has to be one of the Campaign::TYPE_* constant values.', __METHOD__);
+	public function new(type:String) {
+		
+		if( type != TYPE_DIRECT && type != TYPE_ORGANIC && type != TYPE_REFERRAL ) {
+			Tracker._raiseError('Campaign type has to be one of the Campaign::TYPE_* constant values.', 'Campaign.new');
 		}
 		
 		this.type = type;
@@ -145,17 +146,14 @@ class Campaign {
 				this.name   = '(direct)';
 				this.source = '(direct)';
 				this.medium = '(none)';
-				break;
 			// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignManager.as#340
 			case /*self.*/TYPE_REFERRAL:
 				this.name   = '(referral)';
 				this.medium = 'referral';
-				break;
 			// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignManager.as#280
 			case /*self.*/TYPE_ORGANIC:
 				this.name   = '(organic)';
 				this.medium = 'organic';
-				break;
 		}
 		
 		this.creationTime = new DateTime();
@@ -166,160 +164,114 @@ class Campaign {
 	 * @return googleAnalytics.Campaign
 	 */
 	public static function createFromReferrer(url:String) {
-		instance = new static(/*self.*/TYPE_REFERRAL);
-		urlInfo = parse_url(url);
-		instance.source  = urlInfo.getset('host');
-		instance.content = urlInfo.getset('path');
-		
+		var instance = new Campaign(TYPE_REFERRAL);
+
+		var urlInfo = new URLParser(url);
+		instance.source  = urlInfo.host;
+		instance.content = urlInfo.path;
 		return instance;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignTracker.as#153
 	 */
-	function validate() {
+	public function validate() {
 		// NOTE: gaforflash states that id and gClickId must also be specified,
 		// but that doesn't seem to be correct
-		if(!this.source) {
-			Tracker._raiseError('Campaigns need to have at least the "source" attribute defined.', __METHOD__);
+		if(this.source == null) {
+			Tracker._raiseError('Campaigns need to have at least the "source" attribute defined.', 'Campaign.validate');
 		}
 	}
 	
-	/**
-	 */
-	function setType(type:String) {
+	public function setType(type:String) {
 		this.type = type;
 	}
-	
-	/**
-	 */
-	function getType() : String {
+
+	public function getType() : String {
 		return this.type;
 	}
 	
-	/**
-	 */
-	function setCreationTime(creationTime:DateTime) {
+	public function setCreationTime(creationTime:DateTime) {
 		this.creationTime = creationTime;
 	}
 	
-	/**
-	 */
-	function getCreationTime() : DateTime {
+	public function getCreationTime() : DateTime {
 		return this.creationTime;
 	}
 	
-	/**
-	 */
-	function setResponseCount(responseCount) {
-		this.responseCount = (int)responseCount;
+	public function setResponseCount(responseCount:Int) {
+		this.responseCount = responseCount;
 	}
 	
-	/**
-	 */
-	function getResponseCount() : Int {
+	public function getResponseCount() : Int {
 		return this.responseCount;
 	}
 	
-	/**
-	 */
-	function increaseResponseCount(byAmount:Int=1) {
+	public function increaseResponseCount(byAmount:Int=1) {
 		this.responseCount += byAmount;
 	}
 	
-	/**
-	 */
-	function setId(id:Int) {
+	public function setId(id:Int) {
 		this.id = id;
 	}
 	
-	/**
-	 */
-	function getId() : Int {
+	public function getId() : Int {
 		return this.id;
 	}
 	
-	/**
-	 */
-	function setSource(source:String) {
+	public function setSource(source:String) {
 		this.source = source;
 	}
 	
-	/**
-	 */
-	function getSource() : String {
+	public function getSource() : String {
 		return this.source;
 	}
 	
-	/**
-	 */
-	function setGClickId(gClickId:String) {
+	public function setGClickId(gClickId:String) {
 		this.gClickId = gClickId;
 	}
 	
-	/**
-	 */
-	function getGClickId() : String {
+	public function getGClickId() : String {
 		return this.gClickId;
 	}
 	
-	/**
-	 */
-	function setDClickId(dClickId:String) {
+	public function setDClickId(dClickId:String) {
 		this.dClickId = dClickId;
 	}
 	
-	/**
-	 */
-	function getDClickId() : String {
+	public function getDClickId() : String {
 		return this.dClickId;
 	}
 	
-	/**
-	 */
-	function setName(name:String) {
+	public function setName(name:String) {
 		this.name = name;
 	}
 	
-	/**
-	 */
-	function getName() : String {
+	public function getName() : String {
 		return this.name;
 	}
 	
-	/**
-	 */
-	function setMedium(medium:String) {
+	public function setMedium(medium:String) {
 		this.medium = medium;
 	}
 	
-	/**
-	 */
-	function getMedium() : String {
+	public function getMedium() : String {
 		return this.medium;
 	}
 	
-	/**
-	 */
-	function setTerm(term:String) {
+	public function setTerm(term:String) {
 		this.term = term;
 	}
 	
-	/**
-	 */
-	function getTerm() : String {
+	public function getTerm() : String {
 		return this.term;
 	}
 	
-	/**
-	 */
-	function setContent(content:String) {
+	public function setContent(content:String) {
 		this.content = content;
 	}
 	
-	/**
-	 */
-	function getContent() : String {
+	public function getContent() : String {
 		return this.content;
 	}
 	

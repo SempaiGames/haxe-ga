@@ -26,33 +26,26 @@
 
 package  googleAnalytics.internals.request;
 
+import googleAnalytics.Config;
+import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.SocialInteraction;
 
 
-class SocialinteractionRequest extends PageviewRequest {
+class SocialInteractionRequest extends PageviewRequest {
 	
-	/**
-	 * @var googleAnalytics.SocialInteraction
-	 */
-	private var socialInteraction : googleAnalytics;
+	private var socialInteraction : SocialInteraction;
 	
-	
-	/**
-	 */
-	private function getType() : String {
+	override private function getType() : String {
 		return Request.TYPE_SOCIAL;
 	}
 	
-	/**
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildParameters() : googleAnalytics {
-		p = super.buildParameters();
+	override private function buildParameters() : ParameterHolder {
+		var p = super.buildParameters();
 		
 		p.utmsn  = this.socialInteraction.getNetwork();
 		p.utmsa  = this.socialInteraction.getAction();
 		p.utmsid = this.socialInteraction.getTarget();
-		if(p.utmsid === null) {
+		if(p.utmsid == null) {
 			// Default to page path like ga.js,
 			// see http://code.google.com/apis/analytics/docs/tracking/gaTrackingSocial.html#settingUp
 			p.utmsid = this.page.getPath();
@@ -61,18 +54,16 @@ class SocialinteractionRequest extends PageviewRequest {
 		return p;
 	}
 	
-	/**
-	 * @return googleAnalytics.SocialInteraction
-	 */
-	function getSocialInteraction() : googleAnalytics {
+	public function getSocialInteraction() : SocialInteraction {
 		return this.socialInteraction;
 	}
 	
-	/**
-	 * @param googleAnalytics.SocialInteraction $socialInteraction
-	 */
-	function setSocialInteraction(socialInteraction:SocialInteraction) {
+	public function setSocialInteraction(socialInteraction:SocialInteraction) {
 		this.socialInteraction = socialInteraction;
+	}
+	
+	public function new(config:Config = null) {
+		super(config);	
 	}
 	
 }

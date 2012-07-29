@@ -62,80 +62,58 @@ class Event {
 	private var noninteraction : Bool = false;
 	
 	
-	/**
-	 */
-	function __construct(category:String=null, action:String=null, label:String=null, value:Int=null, noninteraction:Bool=null) {
-		if(category       !== null) this.setCategory(category);
-		if(action         !== null) this.setAction(action);
-		if(label          !== null) this.setLabel(label);
-		if(value          !== null) this.setValue(value);
-		if(noninteraction !== null) this.setNoninteraction(noninteraction);
+	public function new(category:String=null, action:String=null, label:String=null, value:Int=null, noninteraction:Bool=null) {
+		if(category       != null) this.setCategory(category);
+		if(action         != null) this.setAction(action);
+		if(label          != null) this.setLabel(label);
+		if(value          != null) this.setValue(value);
+		if(noninteraction != null) this.setNoninteraction(noninteraction);
 	}
 	
-	function validate() : Void {
-		if(this.category === null || this.action === null) {
-			Tracker._raiseError('Events need at least to have a category and action defined.', __METHOD__);
+	public function validate() : Void {
+		if(this.category == null || this.action == null) {
+			Tracker._raiseError('Events need at least to have a category and action defined.', 'Event.validate');
 		}
 	}
 	
-	/**
-	 */
-	function getCategory() : String {
+	public function getCategory() : String {
 		return this.category;
 	}
 	
-	/**
-	 */
-	function setCategory(category:String) {
+	public function setCategory(category:String) {
 		this.category = category;
 	}
 	
-	/**
-	 */
-	function getAction() : String {
+	public function getAction() : String {
 		return this.action;
 	}
 	
-	/**
-	 */
-	function setAction(action:String) {
+	public function setAction(action:String) {
 		this.action = action;
 	}
 	
-	/**
-	 */
-	function getLabel() : String {
+	public function getLabel() : String {
 		return this.label;
 	}
 	
-	/**
-	 */
-	function setLabel(label:String) {
+	public function setLabel(label:String) {
 		this.label = label;
 	}
 	
-	/**
-	 */
-	function getValue() : Int {
+	public function getValue() : Int {
 		return this.value;
 	}
 	
-	/**
-	 */
-	function setValue(value:Int) {
-		this.value = (int)value;
+	public function setValue(value:Int) {
+		this.value = value;
 	}
 	
-	/**
-	 */
-	function getNoninteraction() : Bool {
+	public function getNoninteraction() : Bool {
 		return this.noninteraction;
 	}
 	
-	/**
-	 */
-	function setNoninteraction(value:Bool) {
-		this.noninteraction = (bool)value;
+	public function setNoninteraction(value:Bool) {
+		this.noninteraction = value;
 	}
 	
 }

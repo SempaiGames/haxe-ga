@@ -42,7 +42,18 @@ class Util {
 	 * Mimics Javascript's encodeURIComponent() function for consistency with the GA Javascript client.
 	 */
 	public static function encodeUriComponent(value:Dynamic) : String {
-		return static.convertToUriComponentEncoding(rawurlencode(value));
+		return convertToUriComponentEncoding(StringTools.urlEncode(value));
+	}
+	
+	public static function stringReplaceArray(s:String, sub:Array<String>, by:Array<String>):String {
+		for(i in 0...sub.length-1 ) {
+			s=StringTools.replace(s, sub[i], by[i]);
+		}
+		return s;
+	}
+	
+	public static function parseInt(s:String, defaultVal:Int):Int{
+		return (s==null)?defaultVal:Std.parseInt(s);
 	}
 	
 	/**
@@ -51,7 +62,7 @@ class Util {
 	 * @link http://devpro.it/examples/php_js_escaping.php
 	 */
 	public static function convertToUriComponentEncoding(encodedValue:String) : String {
-		return encodedValue.replace([ '%21', '%2A', '%27', '%28', '%29' ], [ '!', '*', "'", '(', ')' ]);
+		return stringReplaceArray(encodedValue,[ '%21', '%2A', '%27', '%28', '%29' ], [ '!', '*', "'", '(', ')' ]);
 	}
 	
 	/**
@@ -59,7 +70,7 @@ class Util {
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/Utils.as#33
 	 */
 	public static function generate32bitRandom() : Int {
-		return Math.round((rand() / getrandmax()) * 0x7fffffff);
+		return Math.round(Math.random() * 0x7fffffff);
 	}
 	
 	/**
@@ -67,15 +78,13 @@ class Util {
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/Utils.as#44
 	 */
 	public static function generateHash(string:String) : Int {
-		string = (string)string;
-		hash = 1;
-		
-		if(string !== null && string !== '') {
+		var hash:Int = 1;
+		var current;
+		var leftMost7;
+		if(string != null && string != '') {
 			hash = 0;
-			
-			length = string.length;
-			for(pos = length - 1; pos >= 0; pos--) {
-				current   = ord(string[pos]);
+			for(pos in (string.length - 1)...0) {
+				current   = string.charCodeAt(pos);
 				hash      = ((hash << 6) & 0xfffffff) + current + (current << 14);
 				leftMost7 = hash & 0xfe00000;
 				if(leftMost7 != 0) {

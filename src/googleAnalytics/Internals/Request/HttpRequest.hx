@@ -26,8 +26,9 @@
 
 package  googleAnalytics.internals.request;
 
+import googleAnalytics.Campaign;
 import googleAnalytics.Config;
-
+import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.internals.Util;
 
 /**
@@ -41,58 +42,32 @@ class HttpRequest {
 	 * @see ParameterHolder::$utmt
 	 */
 	private var type : String;
-	
-	/**
-	 * @var googleAnalytics.Config
-	 */
-	private var config : googleAnalytics;
-	
-	/**
-	 */
+	private var config : Config;
 	private var xForwardedFor : String;
-	
-	/**
-	 */
 	private var userAgent : String;
 	
-	
-	/**
-	 * @param googleAnalytics.Config $config
-	 */
-	function __construct(config:Config=null) {
+	public function new(config:Config=null) {
 		this.setConfig(config ? config : new Config());
 	}
 	
-	/**
-	 * @return googleAnalytics.Config
-	 */
-	function getConfig() : googleAnalytics {
+	public function getConfig() : Config {
 		return this.config;
 	}
 	
-	/**
-	 * @param googleAnalytics.Config $config
-	 */
-	function setConfig(config:Config) {
+	public function setConfig(config:Config) {
 		this.config = config;
 	}
 	
-	/**
-	 */
 	private function setXForwardedFor(value:String) {
 		this.xForwardedFor = value;
 	}
 	
-	/**
-	 */
 	private function setUserAgent(value:String) {
 		this.userAgent = value;
 	}
 	
-	/**
-	 */
 	private function buildHttpRequest() : String {
-		parameters = this.buildParameters();
+		var parameters = this.buildParameters();
 		
 		// This constant is supported as the 4th argument of http_build_query()
 		// from PHP 5.3.6 on and will tell it to use rawurlencode() instead of urlencode()
@@ -112,6 +87,7 @@ class HttpRequest {
 		// Recent versions of ga.js use HTTP POST requests if the query string is too long
 		usePost = queryString.length > 2036;
 		
+		var r:String;
 		if(!usePost) {
 			r = 'GET ' + this.config.getEndpointPath() + '?' + queryString + ' HTTP/1.0' + "\r\n";
 		} else {
@@ -147,10 +123,7 @@ class HttpRequest {
 		return r;
 	}
 	
-	/**
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private abstract function buildParameters() : Void;
+	private function buildParameters() : ParameterHolder {}
 	
 	/**
 	 * This method should only be called directly or indirectly by fire(), but must
@@ -161,15 +134,15 @@ class HttpRequest {
 	 * @see HttpRequest::fire()
 	 * @return null|string|bool
 	 */
-	function _send() : null {
-		request = this.buildHttpRequest();
-		response = null;
+	public function _send() : String {
+		var request = this.buildHttpRequest();
+		var response = null;
 		
 		// Do not actually send the request if endpoint host is set to null
-		if(this.config.getEndpointHost() !== null) {
+		if(this.config.getEndpointHost() != null) {
 			timeout = this.config.getRequestTimeout();
 			
-			socket = fsockopen(this.config.getEndpointHost(), 80, errno, errstr, timeout);
+			var socket = fsockopen(this.config.getEndpointHost(), 80, errno, errstr, timeout);
 			if(!socket) return false;
 			
 			if(this.config.getFireAndForget()) {
@@ -181,7 +154,7 @@ class HttpRequest {
 			stream_set_timeout(socket, timeoutS, timeoutUs);
 			
 			// Ensure that the full request is sent (see http://code.google.com/p/php-ga/issues/detail?id=11)
-			sentData = 0;
+			var sentData = 0;
 			toBeSentData = request.length;
 			while(sentData < toBeSentData) {
 				sentData += fwrite(socket, request);
@@ -196,7 +169,8 @@ class HttpRequest {
 			fclose(socket);
 		}
 		
-		if(loggingCallback = this.config.getLoggingCallback()) {
+		var loggingCallback = this.config.getLoggingCallback();
+		if(loggingCallback!=null) {
 			loggingCallback(request, response);
 		}
 		
@@ -207,7 +181,7 @@ class HttpRequest {
 	 * Simply delegates to send() if config option "sendOnShutdown" is disabled
 	 * or enqueues the request by registering a PHP shutdown function.
 	 */
-	function fire() {
+	public function fire() {
 		if(this.config.getSendOnShutdown()) {
 			// This dumb variable assignment is needed as PHP prohibits using
 			// $this in closure use statements
@@ -215,9 +189,7 @@ class HttpRequest {
 			// We use a closure here to retain the current values/states of
 			// this instance and $request (as the use statement will copy them
 			// into its own scope)
-			register_shutdown_function(function() use(instance) {
-				instance._send();
-			});
+			register_shutdown_function(function(){instance._send();});
 		} else {
 			this._send();
 		}

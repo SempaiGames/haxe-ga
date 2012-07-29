@@ -70,77 +70,51 @@ class Page {
 	static inline public var REFERRER_INTERNAL = '0';
 	
 	
-	/**
-	 */
-	function __construct(path:String) {
+	public function new(path:String) {
 		this.setPath(path);
 	}
 	
-	/**
-	 */
-	function setPath(path:String) {
-		if(path && path[0] != '/') {
-			Tracker._raiseError('The page path should always start with a slash ("/").', __METHOD__);
+	public function setPath(path:String) {
+		if(path!=null && path.charAt(0) != '/') {
+			Tracker._raiseError('The page path should always start with a slash ("/").','Page.setPath');
 		}
 		
 		this.path = path;
 	}
 	
-	/**
-	 */
-	function getPath() : String {
+	public function getPath() : String {
 		return this.path;
 	}
 	
-	/**
-	 */
-	function setTitle(title:String) {
+	public function setTitle(title:String) {
 		this.title = title;
 	}
 	
-	/**
-	 */
-	function getTitle() : String {
+	public function getTitle() : String {
 		return this.title;
 	}
 	
-	/**
-	 */
-	function setCharset(encoding) {
+	public function setCharset(encoding) {
 		this.charset = encoding;
 	}
 	
-	/**
-	 */
-	function getCharset() : String {
+	public function getCharset() : String {
 		return this.charset;
 	}
 	
-	/**
-	 */
-	function setReferrer(referrer:String) {
+	public function setReferrer(referrer:String) {
 		this.referrer = referrer;
 	}
 	
-	/**
-	 */
-	function getReferrer() : String {
+	public function getReferrer() : String {
 		return this.referrer;
 	}
 	
-	/**
-	 */
-	function setLoadTime(loadTime:Int) {
-		if((int)loadTime != (float)loadTime) {
-			return Tracker._raiseError('Page load time must be specified in integer milliseconds.', __METHOD__);
-		}
-		
-		this.loadTime = (int)loadTime;
+	public function setLoadTime(loadTime:Int) {
+		this.loadTime = loadTime;
 	}
 	
-	/**
-	 */
-	function getLoadTime() : Int {
+	public function getLoadTime() : Int {
 		return this.loadTime;
 	}
 	

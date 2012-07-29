@@ -26,6 +26,7 @@
 
 package  googleAnalytics.internals.request;
 
+import googleAnalytics.Config;
 import googleAnalytics.Tracker;
 import googleAnalytics.Visitor;
 import googleAnalytics.Session;
@@ -38,41 +39,15 @@ import googleAnalytics.internals.X10;
 
 class Request extends HttpRequest {
 	
-	/**
-	 * @var googleAnalytics.Tracker
-	 */
-	private var tracker : googleAnalytics;
-	
-	/**
-	 * @var googleAnalytics.Visitor
-	 */
-	private var visitor : googleAnalytics;
-	
-	/**
-	 * @var googleAnalytics.Session
-	 */
-	private var session : googleAnalytics;
+	private var tracker : Tracker;
+	private var visitor : Visitor;
+	private var session : Session;
 	
 	
-	/**
-	 * @const string
-	 */
 	static inline public var TYPE_PAGE           = null;
-	/**
-	 * @const string
-	 */
 	static inline public var TYPE_EVENT          = 'event';
-	/**
-	 * @const string
-	 */
 	static inline public var TYPE_TRANSACTION    = 'tran';
-	/**
-	 * @const string
-	 */
 	static inline public var TYPE_ITEM           = 'item';
-	/**
-	 * @const string
-	 */
 	static inline public var TYPE_SOCIAL         = 'social';
 	/**
 	 * This type of request is deprecated in favor of encoding custom variables
@@ -81,28 +56,12 @@ class Request extends HttpRequest {
 	 * @see ParameterHolder::$__utmv
 	 * @link http://code.google.com/apis/analytics/docs/gaJS/gaJSApiBasicConfiguration.html#_gat.GA_Tracker_._setVar
 	 * @deprecated
-	 * @const string
 	 */
 	static inline public var TYPE_CUSTOMVARIABLE = 'var';
-	
-	/**
-	 * @const int
-	 */
 	static inline public var X10_CUSTOMVAR_NAME_PROJECT_ID  = 8;
-	/**
-	 * @const int
-	 */
 	static inline public var X10_CUSTOMVAR_VALUE_PROJECT_ID = 9;
-	/**
-	 * @const int
-	 */
 	static inline public var X10_CUSTOMVAR_SCOPE_PROJECT_ID = 11;
-	
-	/**
-	 * @const string
-	 */
 	static inline public var CAMPAIGN_DELIMITER = '|';
-	
 	
 	/**
 	 * Indicates the type of request, will be mapped to "utmt" parameter
@@ -110,11 +69,9 @@ class Request extends HttpRequest {
 	 * @see ParameterHolder::$utmt
 	 * @return string See Request::TYPE_* constants
 	 */
-	private abstract function getType() : Void;
+	private function getType() : String { return null; }
 	
-	/**
-	 */
-	private function buildHttpRequest() : String {
+	override private function buildHttpRequest() : String {
 		this.setXForwardedFor(this.visitor.getIpAddress());
 		this.setUserAgent(this.visitor.getUserAgent());
 		
@@ -124,26 +81,23 @@ class Request extends HttpRequest {
 		// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Configuration.as?r=237#48
 		// and http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/eventTrackerGuide.html#implementationConsiderations
 		if(this.session.getTrackCount() > 500) {
-			Tracker._raiseError('Google Analytics does not guarantee to process more than 500 requests per session.', __METHOD__);
+			Tracker._raiseError('Google Analytics does not guarantee to process more than 500 requests per session.', 'Request.buildHttpRequest');
 		}
 		
-		if(this.tracker.getCampaign()) {
+		if(this.tracker.getCampaign()!=null) {
 			this.tracker.getCampaign().increaseResponseCount();
 		}
 		
 		return super.buildHttpRequest();
 	}
 	
-	/**
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildParameters() : googleAnalytics {
-		p = new ParameterHolder();
+	override private function buildParameters() : ParameterHolder {
+		var p:ParameterHolder = new ParameterHolder();
 		
 		p.utmac = this.tracker.getAccountId();
 		p.utmhn = this.tracker.getDomainName();
 		
-		p.utmt = this.getType();
+		p.utmt = ''+this.getType();
 		p.utmn = Util.generate32bitRandom();
 		
 		// The "utmip" parameter is only relevant if a mobile analytics
@@ -151,8 +105,8 @@ class Request extends HttpRequest {
 		// see http://code.google.com/p/php-ga/issues/detail?id=9
 		p.utmip = this.visitor.getIpAddress();
 		
-		p.aip = this.tracker.getConfig().getAnonymizeIpAddresses() ? 1 : null;
-		if(p.aip) {
+		p.aip = Tracker.getConfig().getAnonymizeIpAddresses() ? 1 : null;
+		if(p.aip!=null) {
 			// Anonymize last IP block
 			p.utmip = p.utmip.substr(0, p.utmip.lastIndexOf('.')) + '.0';
 		}
@@ -168,21 +122,17 @@ class Request extends HttpRequest {
 		return p;
 	}
 	
-	/**
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildVisitorParameters(p:ParameterHolder) : googleAnalytics {
+	private function buildVisitorParameters(p:ParameterHolder) : ParameterHolder {
 		// Ensure correct locale format, see https://developer.mozilla.org/en/navigator.language
-		p.utmul = ((this.visitor.getLocale()).replace('_', '-')).toLowerCase();
+		p.utmul = StringTools.replace(this.visitor.getLocale(),'_', '-').toLowerCase();
 		
-		if(this.visitor.getFlashVersion() !== null) {
+		if(this.visitor.getFlashVersion() != null) {
 			p.utmfl = this.visitor.getFlashVersion();
 		}
-		if(this.visitor.getJavaEnabled() !== null) {
-			p.utmje = this.visitor.getJavaEnabled();
+		if(this.visitor.getJavaEnabled() != null) {
+			p.utmje = this.visitor.getJavaEnabled()?'1':'0';
 		}
-		if(this.visitor.getScreenColorDepth() !== null) {
+		if(this.visitor.getScreenColorDepth() != null) {
 			p.utmsc = this.visitor.getScreenColorDepth() + '-bit';
 		}
 		p.utmsr = this.visitor.getScreenResolution();
@@ -192,50 +142,45 @@ class Request extends HttpRequest {
 	
 	/**
 	 * @link http://xahlee.org/js/google_analytics_tracker_2010-07-01_expanded.js line 575
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildCustomVariablesParameter(p:ParameterHolder) : googleAnalytics {
-		customVars = this.tracker.getCustomVariables();
-		if(customVars) {
-			if(customVars.length > 5) {
-				// See http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#usage
-				Tracker._raiseError('The sum of all custom variables cannot exceed 5 in any given request.', __METHOD__);
-			}
-			
-			x10 = new X10();
-			
-			x10.clearKey(/*self.*/X10_CUSTOMVAR_NAME_PROJECT_ID);
-			x10.clearKey(/*self.*/X10_CUSTOMVAR_VALUE_PROJECT_ID);
-			x10.clearKey(/*self.*/X10_CUSTOMVAR_SCOPE_PROJECT_ID);
-			
-			for(customVar in customVars) {
-				// Name and value get encoded here,
-				// see http://xahlee.org/js/google_analytics_tracker_2010-07-01_expanded.js line 563
-				name  = Util.encodeUriComponent(customVar.getName());
-				value = Util.encodeUriComponent(customVar.getValue());
-				
-				x10.setKey(/*self.*/X10_CUSTOMVAR_NAME_PROJECT_ID, customVar.getIndex(), name);
-				x10.setKey(/*self.*/X10_CUSTOMVAR_VALUE_PROJECT_ID, customVar.getIndex(), value);
-				if(customVar.getScope() !== null && customVar.getScope() != CustomVariable.SCOPE_PAGE) {
-					x10.setKey(/*self.*/X10_CUSTOMVAR_SCOPE_PROJECT_ID, customVar.getIndex(), customVar.getScope());
-				}
-			}
-			
-			p.utme += x10.renderUrlString();
+\	 */
+	private function buildCustomVariablesParameter(p:ParameterHolder) : ParameterHolder {
+		var customVars = this.tracker.getCustomVariables();
+		if (customVars == null) return p;
+		if(customVars.length > 5) {
+			// See http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#usage
+			Tracker._raiseError('The sum of all custom variables cannot exceed 5 in any given request.', 'Request.buildCustomVariablesParameter');
 		}
 		
+		var x10:X10 = new X10();
+		var name;
+		var value;
+		
+		x10.clearKey(/*self.*/X10_CUSTOMVAR_NAME_PROJECT_ID);
+		x10.clearKey(/*self.*/X10_CUSTOMVAR_VALUE_PROJECT_ID);
+		x10.clearKey(/*self.*/X10_CUSTOMVAR_SCOPE_PROJECT_ID);
+		
+		for(customVar in customVars) {
+			// Name and value get encoded here,
+			// see http://xahlee.org/js/google_analytics_tracker_2010-07-01_expanded.js line 563
+			name  = Util.encodeUriComponent(customVar.getName());
+			value = Util.encodeUriComponent(customVar.getValue());
+			
+			x10.setKey(/*self.*/X10_CUSTOMVAR_NAME_PROJECT_ID, customVar.getIndex(), name);
+			x10.setKey(/*self.*/X10_CUSTOMVAR_VALUE_PROJECT_ID, customVar.getIndex(), value);
+			if(customVar.getScope() != null && customVar.getScope() != CustomVariable.SCOPE_PAGE) {
+				x10.setKey(/*self.*/X10_CUSTOMVAR_SCOPE_PROJECT_ID, customVar.getIndex(), customVar.getScope());
+			}
+		}
+		
+		p.utme += x10.renderUrlString();
 		return p;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/core/GIFRequest.as#123
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildCookieParameters(p:ParameterHolder) : googleAnalytics {
-		domainHash = this.generateDomainHash();
-		
+	private function buildCookieParameters(p:ParameterHolder) : ParameterHolder {
+		var domainHash = this.generateDomainHash();
 		p.__utma  = domainHash + '.';
 		p.__utma += this.visitor.getUniqueId() + '.';
 		p.__utma += this.visitor.getFirstVisitTime().format('U') + '.';
@@ -251,60 +196,44 @@ class Request extends HttpRequest {
 		
 		p.__utmc = domainHash;
 		
-		cookies = [];
-		cookies[] = '__utma=' + p.__utma + ';';
-		if(p.__utmz) {
-			cookies[] = '__utmz=' + p.__utmz + ';';
+		var cookies : String = '__utma=' + p.__utma + ';';
+		if(p.__utmz!=null) {
+			cookies += '+__utmz=' + p.__utmz + ';';
 		}
-		if(p.__utmv) {
-			cookies[] = '__utmv=' + p.__utmv + ';';
+		if(p.__utmv!=null) {
+			cookies += '+__utmv=' + p.__utmv + ';';
 		}
-		
-		p.utmcc = cookies.join('+');
-		
+		p.utmcc = cookies;
 		return p;
 	}
 	
-	/**
-	 * @param googleAnalytics.internals.ParameterHolder $p
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildCampaignParameters(p:ParameterHolder) : googleAnalytics {
-		campaign = this.tracker.getCampaign();
-		if(campaign) {
-			p.__utmz  = this.generateDomainHash() + '.';
-			p.__utmz += campaign.getCreationTime().format('U') + '.';
-			p.__utmz += this.visitor.getVisitCount() + '.';
-			p.__utmz += campaign.getResponseCount() + '.';
-			
-			// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignTracker.as#236
-			data = [ 
-				'utmcid'   => campaign.getId(),
-				'utmcsr'   => campaign.getSource(),
-				'utmgclid' => campaign.getGClickId(),
-				'utmdclid' => campaign.getDClickId(),
-				'utmccn'   => campaign.getName(),
-				'utmcmd'   => campaign.getMedium(),
-				'utmctr'   => campaign.getTerm(),
-				'utmcct'   => campaign.getContent(),
-			 ];
-			for(key => value in data) {
-				if(value !== null && value !== '') {
-					// Only spaces and pluses get escaped in gaforflash and ga.js, so we do the same
-					p.__utmz += key + '=' + value.replace([ '+', ' ' ], '%20') + static.CAMPAIGN_DELIMITER;
-				}
-			}
-			p.__utmz = p.__utmz.rtrim(static.CAMPAIGN_DELIMITER);
-		}
+	private function buildCampaignParameters(p:ParameterHolder) : ParameterHolder {
+		var campaign = this.tracker.getCampaign();
+		if (campaign == null) return p;
+		p.__utmz  = this.generateDomainHash() + '.';
+		p.__utmz += campaign.getCreationTime().format('U') + '.';
+		p.__utmz += this.visitor.getVisitCount() + '.';
+		p.__utmz += campaign.getResponseCount() + '.';
 		
+		// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/campaign/CampaignTracker.as#236
+		var data:String = 
+			'utmcid='   + campaign.getId() + CAMPAIGN_DELIMITER +
+			'utmcsr='   + campaign.getSource() + CAMPAIGN_DELIMITER +
+			'utmgclid=' + campaign.getGClickId() + CAMPAIGN_DELIMITER +
+			'utmdclid=' + campaign.getDClickId() + CAMPAIGN_DELIMITER +
+			'utmccn='   + campaign.getName() + CAMPAIGN_DELIMITER +
+			'utmcmd='   + campaign.getMedium() + CAMPAIGN_DELIMITER +
+			'utmctr='   + campaign.getTerm() + CAMPAIGN_DELIMITER +
+			'utmcct='   + campaign.getContent();
+		p.__utmz += StringTools.replace(StringTools.replace(data, '+', '%20'), ' ', '%20');
 		return p;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Tracker.as#585
 	 */
-	private function generateDomainHash() : String {
-		hash = 1;
+	private function generateDomainHash() : Int {
+		var hash:Int = 1;
 		
 		if(this.tracker.getAllowHash()) {
 			hash = Util.generateHash(this.tracker.getDomainName());
@@ -313,46 +242,31 @@ class Request extends HttpRequest {
 		return hash;
 	}
 	
-	/**
-	 * @return googleAnalytics.Tracker
-	 */
-	function getTracker() : googleAnalytics {
+	public function getTracker() : Tracker {
 		return this.tracker;
 	}
 	
-	/**
-	 * @param googleAnalytics.Tracker $tracker
-	 */
-	function setTracker(tracker:Tracker) {
+	public function setTracker(tracker:Tracker) {
 		this.tracker = tracker;
 	}
 	
-	/**
-	 * @return googleAnalytics.Visitor
-	 */
-	function getVisitor() : googleAnalytics {
+	public function getVisitor() : Visitor {
 		return this.visitor;
 	}
 	
-	/**
-	 * @param googleAnalytics.Visitor $visitor
-	 */
-	function setVisitor(visitor:Visitor) {
+	public function setVisitor(visitor:Visitor) {
 		this.visitor = visitor;
 	}
 	
-	/**
-	 * @return googleAnalytics.Session
-	 */
-	function getSession() : googleAnalytics {
+	public function getSession() : Session {
 		return this.session;
 	}
 	
-	/**
-	 * @param googleAnalytics.Session $session
-	 */
-	function setSession(session:Session) {
+	public function setSession(session:Session) {
 		this.session = session;
 	}
 	
+	public function new(config:Config=null) {
+		super(config);		
+	}	
 }

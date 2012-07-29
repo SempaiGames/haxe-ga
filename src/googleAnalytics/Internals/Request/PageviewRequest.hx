@@ -26,78 +26,49 @@
 
 package  googleAnalytics.internals.request;
 
+import googleAnalytics.Config;
+import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.Page;
-
-import googleAnalytics.internals.X10;
-
 
 class PageviewRequest extends Request {
 	
-	/**
-	 * @var googleAnalytics.Page
-	 */
-	private var page : googleAnalytics;
-	
-	
-	/**
-	 * @const int
-	 */
-	static inline public var X10_SITESPEED_PROJECT_ID = 14;
-	
-	
-	/**
-	 */
-	private function getType() : String {
+	private var page : Page;
+
+	override private function getType() : String {
 		return Request.TYPE_PAGE;
 	}
 	
-	/**
-	 * @return googleAnalytics.internals.ParameterHolder
-	 */
-	private function buildParameters() : googleAnalytics {
-		p = super.buildParameters();
+	public function new(config:Config=null) {
+		super(config);		
+	}
+	
+	override private function buildParameters() : ParameterHolder {
+		var p = super.buildParameters();
 		
 		p.utmp  = this.page.getPath();
 		p.utmdt = this.page.getTitle();
-		if(this.page.getCharset() !== null) {
+		if(this.page.getCharset() != null) {
 			p.utmcs = this.page.getCharset();
 		}
-		if(this.page.getReferrer() !== null) {
+		if(this.page.getReferrer() != null) {
 			p.utmr = this.page.getReferrer();
 		}
 		
-		if(this.page.getLoadTime() !== null) {
+		if(this.page.getLoadTime() != null) {
 			// Sample sitespeed measurements
 			if(p.utmn % 100 < this.config.getSitespeedSampleRate()) {
-				x10 = new X10();
-				
-				x10.clearKey(/*self.*/X10_SITESPEED_PROJECT_ID);
-				x10.clearValue(/*self.*/X10_SITESPEED_PROJECT_ID);
-				
-				// Taken from ga.js code
-				key = Math.max(Math.min(floor(this.page.getLoadTime() / 100), 5000), 0) * 100;
-				x10.setKey(/*self.*/X10_SITESPEED_PROJECT_ID, X10.OBJECT_KEY_NUM, key);
-				
-				x10.setValue(/*self.*/X10_SITESPEED_PROJECT_ID, X10.VALUE_VALUE_NUM, this.page.getLoadTime());
-				
-				p.utme += x10.renderUrlString();
+				p.utme += 0;
 			}
 		}
 		
 		return p;
 	}
 	
-	/**
-	 * @return googleAnalytics.Page
-	 */
-	function getPage() : googleAnalytics {
+	public function getPage() : Page {
 		return this.page;
 	}
 	
-	/**
-	 * @param googleAnalytics.Page $page
-	 */
-	function setPage(page:Page) {
+	public function setPage(page:Page) {
 		this.page = page;
 	}
 	

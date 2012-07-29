@@ -25,8 +25,7 @@
  */
 
 package googleAnalytics;
-
-ImportAll googleAnalytics.internals.Util;
+import googleAnalytics.internals.Util;
 
 /**
  * @link http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html
@@ -59,32 +58,22 @@ class CustomVariable {
 	 */
 	private var scope : Int = /*self.*/SCOPE_PAGE;
 	
-	
-	/**
-	 * @const int
-	 */
 	static inline public var SCOPE_VISITOR = 1;
-	/**
-	 * @const int
-	 */
 	static inline public var SCOPE_SESSION = 2;
-	/**
-	 * @const int
-	 */
 	static inline public var SCOPE_PAGE    = 3;
 	
 	
 	/**
 	 * @param scope See SCOPE_* constants
 	 */
-	function __construct(index:Int=null, name:String=null, value:Dynamic=null, scope:Int=null) {
-		if(index !== null) this.setIndex(index);
-		if(name  !== null) this.setName(name);
-		if(value !== null) this.setValue(value);
-		if(scope !== null) this.setScope(scope);
+	public function new(index:Int=null, name:String=null, value:Dynamic=null, scope:Int=null) {
+		if(index != null) this.setIndex(index);
+		if(name  != null) this.setName(name);
+		if(value != null) this.setValue(value);
+		if(scope != null) this.setScope(scope);
 	}
 	
-	function validate() : Void {
+	public function validate() : Void {
 		// According to the GA documentation, there is a limit to the combined size of
 		// name and value of 64 bytes after URL encoding,
 		// see http://code.google.com/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#varTypes
@@ -92,68 +81,52 @@ class CustomVariable {
 		// This limit was increased to 128 bytes BEFORE encoding with the 2012-01 release of ga.js however,
 		// see http://code.google.com/apis/analytics/community/gajs_changelog.html
 		if((this.name + this.value).length > 128) {
-			Tracker._raiseError('Custom Variable combined name and value length must not be larger than 128 bytes.', __METHOD__);
+			Tracker._raiseError('Custom Variable combined name and value length must not be larger than 128 bytes.', 'CustomVariable.validate');
 		}
 	}
 	
-	/**
-	 */
-	function getIndex() : Int {
+	public function getIndex() : Int {
 		return this.index;
 	}
 	
 	/**
 	 * @link http://code.google.com/intl/de-DE/apis/analytics/docs/tracking/gaTrackingCustomVariables.html#usage
 	 */
-	function setIndex(index:Int) {
+	public function setIndex(index:Int) {
 		// Custom Variables are limited to five slots officially, but there seems to be a
 		// trick to allow for more of them which we could investigate at a later time (see
 		// http://analyticsimpact.com/2010/05/24/get-more-than-5-custom-variables-in-google-analytics/)
 		if(index < 1 || index > 5) {
-			Tracker._raiseError('Custom Variable index has to be between 1 and 5.', __METHOD__);
+			Tracker._raiseError('Custom Variable index has to be between 1 and 5.', 'CustomVariable.setIndex');
 		}
-		
-		this.index = (int)index;
+		this.index = index;
 	}
 	
-	/**
-	 */
-	function getName() : String {
+	public function getName() : String {
 		return this.name;
 	}
 	
-	/**
-	 */
-	function setName(name:String) {
+	public function setName(name:String) {
 		this.name = name;
 	}
 	
-	/**
-	 */
-	function getValue() : Dynamic {
+	public function getValue() : Dynamic {
 		return this.value;
 	}
 	
-	/**
-	 */
-	function setValue(value:Dynamic) {
+	public function setValue(value:Dynamic) {
 		this.value = value;
 	}
 	
-	/**
-	 */
-	function getScope() : Int {
+	public function getScope() : Int {
 		return this.scope;
 	}
 	
-	/**
-	 */
-	function setScope(scope:Int) {
-		if(!in_array(scope, [ /*self.*/SCOPE_PAGE, /*self.*/SCOPE_SESSION, /*self.*/SCOPE_VISITOR ])) {
-			Tracker._raiseError('Custom Variable scope has to be one of the CustomVariable::SCOPE_* constant values.', __METHOD__);
+	public function setScope(scope:Int) {
+		if( scope != SCOPE_PAGE && scope != SCOPE_SESSION && scope != SCOPE_VISITOR ) {
+			Tracker._raiseError('Custom Variable scope has to be one of the CustomVariable::SCOPE_* constant values.', 'CustomVariable.setScope');
 		}
-		
-		this.scope = (int)scope;
+		this.scope = scope;
 	}
 	
 }

@@ -28,9 +28,6 @@ package googleAnalytics;
 
 import googleAnalytics.internals.Util;
 
-import DateTime;
-
-
 /**
  * You should serialize this object and store it in the user session to keep it
  * persistent between requests (similar to the "__umtb" cookie of
@@ -61,7 +58,7 @@ class Session {
 	private var startTime : DateTime;
 	
 	
-	function __construct() : Void {
+	public function new() : Void {
 		this.setSessionId(this.generateSessionId());
 		this.setTrackCount(0);
 		this.setStartTime(new DateTime());
@@ -74,15 +71,15 @@ class Session {
 	 * @see internals.request\Request::buildCookieParameters()
 	 * @return $this
 	 */
-	function fromUtmb(value:String) {
-		parts = value.split('.');
+	public function fromUtmb(value:String) {
+		var parts : Array<String> = value.split('.');
 		if(parts.length != 4) {
-			Tracker._raiseError('The given "__utmb" cookie value is invalid.', __METHOD__);
+			Tracker._raiseError('The given "__utmb" cookie value is invalid.', 'Session.fromUtmb');
 			return this;
 		}
 		
-		this.setTrackCount(parts[1]);
-		this.setStartTime(new DateTime('@' + parts[3]));
+		this.setTrackCount(Util.parseInt(parts[1],0));
+		this.setStartTime(new DateTime(parts[3]));
 		
 		// Allow chaining
 		return this;
@@ -96,46 +93,31 @@ class Session {
 		return Util.generate32bitRandom();
 	}
 	
-	/**
-	 */
-	function getSessionId() : Int {
+	public function getSessionId() : Int {
 		return this.sessionId;
 	}
 	
-	/**
-	 */
-	function setSessionId(sessionId:Int) {
+	public function setSessionId(sessionId:Int) {
 		this.sessionId = sessionId;
 	}
 	
-	/**
-	 */
-	function getTrackCount() : Int {
+	public function getTrackCount() : Int {
 		return this.trackCount;
 	}
 	
-	/**
-	 */
-	function setTrackCount(trackCount:Int) {
-		this.trackCount = (int)trackCount;
+	public function setTrackCount(trackCount:Int) {
+		this.trackCount = trackCount;
 	}
 	
-	/**
-	 */
-	function increaseTrackCount(byAmount:Int=1) {
+	public function increaseTrackCount(byAmount:Int=1) {
 		this.trackCount += byAmount;
 	}
 	
-	/**
-	 */
-	function getStartTime() : DateTime {
+	public function getStartTime() : DateTime {
 		return this.startTime;
 	}
 	
-	/**
-	 */
-	function setStartTime(startTime:DateTime) {
+	public function setStartTime(startTime:DateTime) {
 		this.startTime = startTime;
 	}
-
 }

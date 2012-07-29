@@ -27,7 +27,6 @@
 package googleAnalytics;
 
 import googleAnalytics.internals.Util;
-import DateTime;
 
 /**
  * You should serialize this object and store it in the user database to keep it
@@ -122,7 +121,7 @@ class Visitor {
 	 */
 	function __construct() {
 		// ga.js sets all three timestamps to now for new visitors, so we do the same
-		now = new DateTime();
+		var now = new DateTime();
 		this.setFirstVisitTime(now);
 		this.setPreviousVisitTime(now);
 		this.setCurrentVisitTime(now);
@@ -139,69 +138,17 @@ class Visitor {
 	 * @return $this
 	 */
 	function fromUtma(value:String) {
-		parts = value.split('.');
+		var parts : Array<String> = value.split('.');
 		if(parts.length != 6) {
-			Tracker._raiseError('The given "__utma" cookie value is invalid.', __METHOD__);
+			Tracker._raiseError('The given "__utma" cookie value is invalid.', 'Visitor.fromUtma');
 			return this;
 		}
 		
-		this.setUniqueId(parts[1]);
-		this.setFirstVisitTime(new DateTime('@' + parts[2]));
-		this.setPreviousVisitTime(new DateTime('@' + parts[3]));
-		this.setCurrentVisitTime(new DateTime('@' + parts[4]));
-		this.setVisitCount(parts[5]);
-		
-		// Allow chaining
-		return this;
-	}
-	
-	/**
-	 * Will extract information for the "ipAddress", "userAgent" and "locale" properties
-	 * from the given $_SERVER variable.
-	 * @return $this
-	 */
-	function fromServerVar() {
-		if(!empty(value.get('REMOTE_ADDR'))) {
-			ip = null;
-			for(key in [ 'X_FORWARDED_FOR', 'REMOTE_ADDR' ]) {
-				if(!empty(value[key]) && !ip) {
-					ips = (value[key]).split(',');
-					ip  = (ips[(ips.length - 1)]).trim();
-					
-					// Double-check if the address has a valid format
-					if(!preg_match('/^[\d+]{1,3}\.[\d+]{1,3}\.[\d+]{1,3}\.[\d+]{1,3}$/i', ip)) {
-						ip = null;
-					}
-					// Exclude private IP address ranges
-					if(preg_match('#^(?:127\.0\.0\.1|10\.|192\.168\.|172\.(?:1[6-9]|2[0-9]|3[0-1])\.)#', ip)) {
-						ip = null;
-					}
-				}
-			}
-			
-			if(ip) {
-				this.setIpAddress(ip);
-			}
-		}
-		
-		if(!empty(value.get('HTTP_USER_AGENT'))) {
-			this.setUserAgent(value.get('HTTP_USER_AGENT'));
-		}
-		
-		if(!empty(value.get('HTTP_ACCEPT_LANGUAGE'))) {
-			parsedLocales = [];
-			if(preg_match_all('/(^|\s*,\s*)([a-zA-Z]{1,8}(-[a-zA-Z]{1,8})*)\s*(;\s*q\s*=\s*(1(\.0{0,3})?|0(\.[0-9]{0,3})))?/i', value.get('HTTP_ACCEPT_LANGUAGE'), matches)) {
-				matches[2] = array_map(function(part) { return part.replace('-', '_'); }, matches[2]);
-				matches[5] = array_map(function(part) { return part === '' ? 1 : part; }, matches[5]);
-				parsedLocales = array_combine(matches[2], matches[5]);
-				arsort(parsedLocales, SORT_NUMERIC);
-				parsedLocales = parsedLocales.keys();
-			}
-			
-			if(parsedLocales) {
-				this.setLocale(parsedLocales[0]);
-			}
-		}
+		this.setUniqueId(Util.parseInt(parts[1],0));
+		this.setFirstVisitTime(new DateTime(parts[2]));
+		this.setPreviousVisitTime(new DateTime(parts[3]));
+		this.setCurrentVisitTime(new DateTime(parts[4]));
+		this.setVisitCount(Util.parseInt(parts[5],0));
 		
 		// Allow chaining
 		return this;
@@ -213,9 +160,7 @@ class Visitor {
 	 */
 	private function generateHash() : Int {
 		// TODO: Emulate orginal Google Analytics client library generation more closely
-		string  = this.userAgent;
-		string += this.screenResolution + this.screenColorDepth;
-		return Util.generateHash(string);
+		return Util.generateHash(this.userAgent + this.screenResolution + this.screenColorDepth);
 	}
 	
 	/**
@@ -232,20 +177,19 @@ class Visitor {
 	/**
 	 * @see generateUniqueId
 	 */
-	function setUniqueId(value:Int) {
+	public function setUniqueId(value:Int) {
 		if(value < 0 || value > 0x7fffffff) {
-			Tracker._raiseError('Visitor unique ID has to be a 32-bit integer between 0 and ' + 0x7fffffff + '.', __METHOD__);
+			Tracker._raiseError('Visitor unique ID has to be a 32-bit integer between 0 and ' + 0x7fffffff + '.', 'Visitor.setUniqueId');
 		}
-		
-		this.uniqueId = (int)value;
+		this.uniqueId = value;
 	}
 	
 	/**
 	 * Will be generated on first call (if not set already) to include as much
 	 * user-specific information as possible.
 	 */
-	function getUniqueId() : Int {
-		if(this.uniqueId === null) {
+	public function getUniqueId() : Int {
+		if(this.uniqueId == null) {
 			this.uniqueId = this.generateUniqueId();
 		}
 		return this.uniqueId;
@@ -255,8 +199,8 @@ class Visitor {
 	 * Updates the "previousVisitTime", "currentVisitTime" and "visitCount"
 	 * fields based on the given session object.
 	 */
-	function addSession(session:Session) {
-		startTime = session.getStartTime();
+	public function addSession(session:Session) {
+		var startTime = session.getStartTime();
 		if(startTime != this.currentVisitTime) {
 			this.previousVisitTime = this.currentVisitTime;
 			this.currentVisitTime  = startTime;
@@ -266,133 +210,91 @@ class Visitor {
 	
 	/**
 	 */
-	function setFirstVisitTime(value:DateTime) {
+	public function setFirstVisitTime(value:DateTime) {
 		this.firstVisitTime = value;
 	}
 	
-	/**
-	 */
-	function getFirstVisitTime() : DateTime {
+	public function getFirstVisitTime() : DateTime {
 		return this.firstVisitTime;
 	}
 	
-	/**
-	 */
-	function setPreviousVisitTime(value:DateTime) {
+	public function setPreviousVisitTime(value:DateTime) {
 		this.previousVisitTime = value;
 	}
 	
-	/**
-	 */
-	function getPreviousVisitTime() : DateTime {
+	public function getPreviousVisitTime() : DateTime {
 		return this.previousVisitTime;
 	}
-	
-	/**
-	 */
-	function setCurrentVisitTime(value:DateTime) {
+
+	public function setCurrentVisitTime(value:DateTime) {
 		this.currentVisitTime = value;
 	}
 	
-	/**
-	 */
-	function getCurrentVisitTime() : DateTime {
+	public function getCurrentVisitTime() : DateTime {
 		return this.currentVisitTime;
 	}
 	
-	/**
-	 */
-	function setVisitCount(value:Int) {
-		this.visitCount = (int)value;
+	public function setVisitCount(value:Int) {
+		this.visitCount = value;
 	}
 	
-	/**
-	 */
-	function getVisitCount() : Int {
+	public function getVisitCount() : Int {
 		return this.visitCount;
 	}
 	
-	/**
-	 */
-	function setIpAddress(value:String) {
+	public function setIpAddress(value:String) {
 		this.ipAddress = value;
 	}
 	
-	/**
-	 */
-	function getIpAddress() : String {
+	public function getIpAddress() : String {
 		return this.ipAddress;
 	}
 	
-	/**
-	 */
-	function setUserAgent(value:String) {
+	public function setUserAgent(value:String) {
 		this.userAgent = value;
 	}
 	
-	/**
-	 */
-	function getUserAgent() : String {
+	public function getUserAgent() : String {
 		return this.userAgent;
 	}
 	
-	/**
-	 */
-	function setLocale(value:String) {
+	public function setLocale(value:String) {
 		this.locale = value;
 	}
 	
-	/**
-	 */
-	function getLocale() : String {
+	public function getLocale() : String {
 		return this.locale;
 	}
 	
-	/**
-	 */
-	function setFlashVersion(value:String) {
+	public function setFlashVersion(value:String) {
 		this.flashVersion = value;
 	}
 	
-	/**
-	 */
-	function getFlashVersion() : String {
+	public function getFlashVersion() : String {
 		return this.flashVersion;
 	}
 	
-	/**
-	 */
-	function setJavaEnabled(value:Bool) {
-		this.javaEnabled = (bool)value;
+	public function setJavaEnabled(value:Bool) {
+		this.javaEnabled = value;
 	}
 	
-	/**
-	 */
-	function getJavaEnabled() : Bool {
+	public function getJavaEnabled() : Bool {
 		return this.javaEnabled;
 	}
 	
-	/**
-	 */
-	function setScreenColorDepth(value:Int) {
-		this.screenColorDepth = (int)value;
+	public function setScreenColorDepth(value:String) {
+		this.screenColorDepth = value;
 	}
 	
-	/**
-	 */
-	function getScreenColorDepth() : String {
+	public function getScreenColorDepth() : String {
 		return this.screenColorDepth;
 	}
 	
-	/**
-	 */
-	function setScreenResolution(value:String) {
+	public function setScreenResolution(value:String) {
 		this.screenResolution = value;
 	}
 	
-	/**
-	 */
-	function getScreenResolution() : String {
+	public function getScreenResolution() : String {
 		return this.screenResolution;
 	}
 	

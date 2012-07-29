@@ -27,6 +27,7 @@
 package  googleAnalytics.internals.request;
 
 import googleAnalytics.Event;
+import googleAnalytics.internals.ParameterHolder;
 
 import googleAnalytics.internals.X10;
 
@@ -36,7 +37,7 @@ class EventRequest extends Request {
 	/**
 	 * @var googleAnalytics.Event
 	 */
-	private var event : googleAnalytics;
+	private var event : Event;
 	
 	
 	/**
@@ -47,18 +48,17 @@ class EventRequest extends Request {
 	
 	/**
 	 */
-	private function getType() : String {
+	override private function getType() : String {
 		return Request.TYPE_EVENT;
 	}
 	
 	/**
 	 * @link http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Tracker.as#1503
-	 * @return googleAnalytics.internals.ParameterHolder
 	 */
-	private function buildParameters() : googleAnalytics {
-		p = super.buildParameters();
+	override private function buildParameters() : ParameterHolder {
+		var p = super.buildParameters();
 		
-		x10 = new X10();
+		var x10 = new X10();
 		
 		x10.clearKey(/*self.*/X10_EVENT_PROJECT_ID);
 		x10.clearValue(/*self.*/X10_EVENT_PROJECT_ID);
@@ -69,12 +69,12 @@ class EventRequest extends Request {
 		// Event Type / Action
 		x10.setKey(/*self.*/X10_EVENT_PROJECT_ID, X10.TYPE_KEY_NUM, this.event.getAction());
 		
-		if(this.event.getLabel() !== null) {
+		if(this.event.getLabel() != null) {
 			// Event Description / Label
 			x10.setKey(/*self.*/X10_EVENT_PROJECT_ID, X10.LABEL_KEY_NUM, this.event.getLabel());
 		}
 		
-		if(this.event.getValue() !== null) {
+		if(this.event.getValue() != null) {
 			x10.setValue(/*self.*/X10_EVENT_PROJECT_ID, X10.VALUE_VALUE_NUM, this.event.getValue());
 		}
 		
@@ -87,17 +87,11 @@ class EventRequest extends Request {
 		return p;
 	}
 	
-	/**
-	 * @return googleAnalytics.Event
-	 */
-	function getEvent() : googleAnalytics {
+	public function getEvent() : Event {
 		return this.event;
 	}
 	
-	/**
-	 * @param googleAnalytics.Event $event
-	 */
-	function setEvent(event:Event) {
+	public function setEvent(event:Event) {
 		this.event = event;
 	}
 	

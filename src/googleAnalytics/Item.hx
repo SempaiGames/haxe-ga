@@ -71,82 +71,58 @@ class Item {
 	private var quantity : Int = 1;
 	
 	
-	function validate() : Void {
-		if(this.sku === null) {
-			Tracker._raiseError('Items need to have a sku/product code defined.', __METHOD__);
+	public function validate() : Void {
+		if(this.sku == null) {
+			Tracker._raiseError('Items need to have a sku/product code defined.', 'Item.validate');
 		}
 	}
 	
-	/**
-	 */
-	function getOrderId() : String {
+	public function getOrderId() : String {
 		return this.orderId;
 	}
 	
-	/**
-	 */
-	function setOrderId(orderId:String) {
+	public function setOrderId(orderId:String) {
 		this.orderId = orderId;
 	}
 	
-	/**
-	 */
-	function getSku() : String {
+	public function getSku() : String {
 		return this.sku;
 	}
 	
-	/**
-	 */
-	function setSku(sku:String) {
+	public function setSku(sku:String) {
 		this.sku = sku;
 	}
 	
-	/**
-	 */
-	function getName() : String {
+	public function getName() : String {
 		return this.name;
 	}
 	
-	/**
-	 */
-	function setName(name:String) {
+	public function setName(name:String) {
 		this.name = name;
 	}
 	
-	/**
-	 */
-	function getVariation() : String {
+	public function getVariation() : String {
 		return this.variation;
 	}
 	
-	/**
-	 */
-	function setVariation(variation:String) {
+	public function setVariation(variation:String) {
 		this.variation = variation;
 	}
 	
-	/**
-	 */
-	function getPrice() : Float {
+	public function getPrice() : Float {
 		return this.price;
 	}
 	
-	/**
-	 */
-	function setPrice(price:Float) {
-		this.price = (float)price;
+	public function setPrice(price:Float) {
+		this.price = price;
 	}
 	
-	/**
-	 */
-	function getQuantity() : Int {
+	public function getQuantity() : Int {
 		return this.quantity;
 	}
 	
-	/**
-	 */
-	function setQuantity(quantity:Int) {
-		this.quantity = (int)quantity;
+	public function setQuantity(quantity:Int) {
+		this.quantity = quantity;
 	}
 	
 }
