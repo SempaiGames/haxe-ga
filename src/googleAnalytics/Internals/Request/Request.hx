@@ -38,18 +38,25 @@ import googleAnalytics.internals.Util;
 import googleAnalytics.internals.X10;
 
 
-class Request extends HttpRequest {
-	
+class Request {
+
+	/**
+	 * Indicates the type of request, will be mapped to "utmt" parameter
+	 * @see ParameterHolder::$utmt
+	 */
+	private var type : String;
+	private var config : Config;
+	private var userAgent : String;
 	private var tracker : Tracker;
 	private var visitor : Visitor;
 	private var session : Session;
-	
-	
+		
 	static inline public var TYPE_PAGE           = null;
 	static inline public var TYPE_EVENT          = 'event';
 	static inline public var TYPE_TRANSACTION    = 'tran';
 	static inline public var TYPE_ITEM           = 'item';
 	static inline public var TYPE_SOCIAL         = 'social';
+
 	/**
 	 * This type of request is deprecated in favor of encoding custom variables
 	 * within the "utme" parameter, but we include it here for completeness
@@ -63,16 +70,53 @@ class Request extends HttpRequest {
 	static inline public var X10_CUSTOMVAR_VALUE_PROJECT_ID = '9';
 	static inline public var X10_CUSTOMVAR_SCOPE_PROJECT_ID = '11';
 	static inline public var CAMPAIGN_DELIMITER = '|';
+
 	
-	/**
-	 * Indicates the type of request, will be mapped to "utmt" parameter
-	 * 
-	 * @see ParameterHolder::$utmt
-	 * @return string See Request::TYPE_* constants
-	 */
-	private function getType() : String { return null; }
+	public function new(config:Config=null) {
+		setConfig((config!=null) ? config : new Config());
+	}
 	
-	override private function buildHttpHeadersAndData(http:Http) {
+	public function getConfig() : Config {
+		return this.config;
+	}
+	
+	public function setConfig(config:Config) {
+		this.config = config;
+	}
+	
+	private function setUserAgent(value:String) {
+		this.userAgent = value;
+	}
+		
+	public function getTracker() : Tracker {
+		return this.tracker;
+	}
+	
+	public function setTracker(tracker:Tracker) {
+		this.tracker = tracker;
+	}
+	
+	public function getVisitor() : Visitor {
+		return this.visitor;
+	}
+	
+	public function setVisitor(visitor:Visitor) {
+		this.visitor = visitor;
+	}
+	
+	public function getSession() : Session {
+		return this.session;
+	}
+	
+	public function setSession(session:Session) {
+		this.session = session;
+	}
+
+	public function onError (e:String) {
+		trace('ERROR: '+e);
+	}
+
+	private function increaseTrackCount() {
 		// Increment session track counter for each request
 		this.session.increaseTrackCount();
 		// See http://code.google.com/p/gaforflash/source/browse/trunk/src/com/google/analytics/v4/Configuration.as?r=237#48
@@ -83,10 +127,55 @@ class Request extends HttpRequest {
 		if(this.tracker.getCampaign()!=null) {
 			this.tracker.getCampaign().increaseResponseCount();
 		}
-		super.buildHttpHeadersAndData(http);
 	}
 	
-	override private function buildParameters() : ParameterHolder {
+	
+	/**
+	 * This method should only be called directly or indirectly by fire(), but must
+	 * remain public as it can be called by a closure function.
+	 * Sends either a normal HTTP request with response or an asynchronous request
+	 * to Google Analytics without waiting for the response. Will always return
+	 * null in the latter case, or false if any connection problems arise.
+	 * @return null|string
+	 */
+	public function send() {
+		// Do not actually send the request if endpoint host is set to null
+		if (config.getEndPointHost() == null) return;
+		var parameters = this.buildParameters();
+		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
+		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
+		increaseTrackCount();
+		#if flash
+			// we must load GoogleAnalytics using Flash API (like loading an image to avoid the check 
+			// of a crossdomain.xml
+			var l : flash.display.Loader = new flash.display.Loader();
+			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
+			urlRequest.url=url;
+			l.load(urlRequest);
+		#else
+			var request : Http = new Http(url);
+			if(userAgent!=null && userAgent!='') {
+				request.setHeader('User-Agent', userAgent);
+			}
+			request.setHeader('Host', 'http://'+config.getEndPointHost());
+			request.setHeader('Connection', 'close');		
+			#if (neko||php||cpp||cs||java)
+				request.cnxTimeout(config.getRequestTimeout());
+			#end
+			request.onError = onError;
+			request.request(false);
+		#end
+	}
+	
+	/**
+	 * Indicates the type of request, will be mapped to "utmt" parameter
+	 * 
+	 * @see ParameterHolder::$utmt
+	 * @return string See Request::TYPE_* constants
+	 */
+	private function getType() : String { return null; }
+	
+	private function buildParameters() : ParameterHolder {
 		var p:ParameterHolder = new ParameterHolder();
 
 		p.utmac = this.tracker.getAccountId();
@@ -227,31 +316,4 @@ class Request extends HttpRequest {
 		return hash;
 	}
 	
-	public function getTracker() : Tracker {
-		return this.tracker;
-	}
-	
-	public function setTracker(tracker:Tracker) {
-		this.tracker = tracker;
-	}
-	
-	public function getVisitor() : Visitor {
-		return this.visitor;
-	}
-	
-	public function setVisitor(visitor:Visitor) {
-		this.visitor = visitor;
-	}
-	
-	public function getSession() : Session {
-		return this.session;
-	}
-	
-	public function setSession(session:Session) {
-		this.session = session;
-	}
-	
-	public function new(config:Config=null) {
-		super(config);		
-	}	
 }
