@@ -33,12 +33,6 @@ package  googleAnalytics.internals;
 class Util {
 	
 	/**
-	 * This class does only have public static methods, no instantiation necessary
-	 */
-	private function __construct() { }
-	
-	
-	/**
 	 * Mimics Javascript's encodeURIComponent() function for consistency with the GA Javascript client.
 	 */
 	public static function encodeUriComponent(value:Dynamic) : String {

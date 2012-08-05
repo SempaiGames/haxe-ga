@@ -160,7 +160,7 @@ class Request {
 			request.setHeader('Host', 'http://'+config.getEndPointHost());
 			request.setHeader('Connection', 'close');		
 			#if (neko||php||cpp||cs||java)
-				request.cnxTimeout(config.getRequestTimeout());
+				request.cnxTimeout=config.getRequestTimeout();
 			#end
 			request.onError = onError;
 			request.request(false);

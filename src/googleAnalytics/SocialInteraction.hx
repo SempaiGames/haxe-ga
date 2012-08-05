@@ -54,7 +54,7 @@ class SocialInteraction {
 	private var target : String;
 	
 	
-	public function __construct(network=null, action=null, target=null) {
+	public function new(network=null, action=null, target=null) {
 		if(network != null) this.setNetwork(network);
 		if(action  != null) this.setAction(action);
 		if(target  != null) this.setTarget(target);

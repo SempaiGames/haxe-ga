@@ -1,6 +1,9 @@
 #-swf9 bin/Haxega.swf
 -js bin/Haxega.js
+#-php bin/php
+#-cpp bin/cpp.exe
 -cp src
 -main Main
 -swf-version 10
 -swf-header 329:21:12:cccccc
+	
