@@ -142,6 +142,9 @@ class Request {
 		// Do not actually send the request if endpoint host is set to null
 		if (config.getEndPointHost() == null) return;
 		var parameters = this.buildParameters();
+		if ( visitor != null ) {
+			setUserAgent( visitor.getUserAgent() );
+		}
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
 		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
 		increaseTrackCount();
