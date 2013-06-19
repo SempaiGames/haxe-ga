@@ -144,6 +144,7 @@ class Request {
 		var parameters = this.buildParameters();
 		if ( visitor != null ) {
 			setUserAgent( visitor.getUserAgent() );
+			parameters.utmvid = visitor.getUniqueId();
 		}
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
 		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
