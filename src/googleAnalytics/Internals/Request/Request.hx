@@ -248,7 +248,11 @@ class Request {
 			}
 		}
 		
-		p.utme += x10.renderUrlString();
+		var eventFragment:String = x10.renderUrlString();
+		// Append only if not null to avoid "null" in event fragments
+		if (eventFragment != null) {
+			p.utme += eventFragment;
+		}
 		return p;
 	}
 	
