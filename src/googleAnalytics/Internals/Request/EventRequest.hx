@@ -78,7 +78,11 @@ class EventRequest extends Request {
 			x10.setValue(/*self.*/X10_EVENT_PROJECT_ID, X10.VALUE_VALUE_NUM, this.event.getValue());
 		}
 		
-		p.utme += x10.renderUrlString();
+		var eventFragment:String = x10.renderUrlString();
+		// Append only if not null to avoid "null" in event fragments
+		if (eventFragment != null) {
+			p.utme += eventFragment;
+		}
 		
 		if(this.event.getNoninteraction()) {
 			p.utmni = 1;
