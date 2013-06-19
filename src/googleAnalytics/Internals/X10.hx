@@ -187,7 +187,8 @@ class X10 {
 	private function renderDataType(data:Array<String>) : String {
 		var result:Array<String> = new Array<String>();
 		var lastI:Int = 0;
-		data.sort(SORT_NUMERIC); // on PHP -> ksort(data, SORT_NUMERIC);
+		// The original order must be retained, otherwise event's category/action/label will be mixed up
+		//data.sort(SORT_NUMERIC); // on PHP -> ksort(data, SORT_NUMERIC);
 		
 		for (i in 0...data.length) {
 			var entry = data[i];

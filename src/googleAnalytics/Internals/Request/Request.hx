@@ -142,6 +142,10 @@ class Request {
 		// Do not actually send the request if endpoint host is set to null
 		if (config.getEndPointHost() == null) return;
 		var parameters = this.buildParameters();
+		if ( visitor != null ) {
+			setUserAgent( visitor.getUserAgent() );
+			parameters.utmvid = visitor.getUniqueId();
+		}
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
 		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
 		increaseTrackCount();
@@ -248,7 +252,11 @@ class Request {
 			}
 		}
 		
-		p.utme += x10.renderUrlString();
+		var eventFragment:String = x10.renderUrlString();
+		// Append only if not null to avoid "null" in event fragments
+		if (eventFragment != null) {
+			p.utme += eventFragment;
+		}
 		return p;
 	}
 	

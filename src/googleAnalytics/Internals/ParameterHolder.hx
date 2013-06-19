@@ -53,6 +53,11 @@ class ParameterHolder {
 	 * Host Name, e.g. "www.example.com"
 	 */
 	public var utmhn : String;
+
+	/**
+	 * Unique visitor ID (random number but should be persisted on the application side)
+	 */
+	public var utmvid : Int;
 	
 	/**
 	 * Indicates the type of request, which is one of null (for page), "event",
