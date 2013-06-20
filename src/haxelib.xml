@@ -5,5 +5,5 @@
     <tag v="google"/>
     <tag v="analytics"/>
     <description>Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.</description>
-    <version name="0.3">Working fine on every platform.</version>
+    <version name="0.3">Event and User-Agent reporting fixes, utmvid parameter support, null values control (thx to goshki)</version>
 </project>
