@@ -1,0 +1,10 @@
+{
+	"name": "haxe-ga",
+	"url": "https://github.com/fbricker/haxe-ga",
+	"license": "GPL",
+	"contributors":["fbricker"],
+    "tags": ["cross","api","google","analytics"],
+    "description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
+	"version": "0.3.1",
+	"releasenote": "Event and User-Agent reporting fixes, utmvid parameter support, null values control (thx to goshki)"
+}
