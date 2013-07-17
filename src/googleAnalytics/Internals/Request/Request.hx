@@ -156,6 +156,10 @@ class Request {
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
 			l.load(urlRequest);
+		#elseif js
+			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
+			var img:js.Dom.Image = cast js.Lib.document.createElement("img");
+			img.src = url;
 		#else
 			var request : Http = new Http(url);
 			if(userAgent!=null && userAgent!='') {
