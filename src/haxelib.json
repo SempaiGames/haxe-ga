@@ -5,6 +5,6 @@
 	"contributors":["fbricker"],
     "tags": ["cross","api","google","analytics"],
     "description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.3.1",
-	"releasenote": "Event and User-Agent reporting fixes, utmvid parameter support, null values control (thx to goshki)"
+	"version": "0.4.0",
+	"releasenote": "Fixed bugs on haxe3 and compatibility to js"
 }
