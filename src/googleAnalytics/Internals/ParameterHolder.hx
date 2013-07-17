@@ -427,8 +427,8 @@ class ParameterHolder {
 	 * Converts this parameter holder to a pure PHP array, filtering out all properties
 	 * prefixed with an underscore ("_").
 	 */
-	public function toHashTable() : Hash<String> {
-		var hash = new Hash<String>();
+	public function toHashTable() : Map<String,String> {
+		var hash = new Map<String,String>();
 		var property:String;
 		for (property in Type.getInstanceFields(ParameterHolder)) {
 			if (property.charAt(0) != '_' && !Reflect.isFunction(Reflect.field(this,property))) {

@@ -84,10 +84,10 @@ class Transaction {
 	/**
 	 * @see Transaction::addItem()
 	 */
-	private var items : Hash<Item>;
+	private var items : Map<String,Item>;
 	
 	public function new() {
-		items = new Hash<Item>();
+		items = new Map<String,Item>();
 	}
 	
 	public function validate() : Void {
@@ -105,7 +105,7 @@ class Transaction {
 		items.set(item.getSku(),item);
 	}
 	
-	public function getItems() : Hash<Item> {
+	public function getItems() : Map<String,Item> {
 		return this.items;
 	}
 	

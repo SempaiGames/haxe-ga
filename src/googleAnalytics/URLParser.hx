@@ -46,9 +46,8 @@ class URLParser
     public var query : String;
     public var anchor : String;
  
-    // Privates
-    inline static private var _parts : Array<String> = ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"];
- 
+    private static var parts : Array<String> = ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"];
+
     public function new(url:String)
     {
         // Save for 'ron
@@ -61,18 +60,18 @@ class URLParser
         r.match(url);
  
         // Use reflection to set each part
-        for (i in 0..._parts.length)
+        for (i in 0...parts.length)
         {
-            Reflect.setField(this, _parts[i],  r.matched(i));
+            Reflect.setField(this, parts[i],  r.matched(i));
         }
     }
  
     public function toString() : String
     {
         var s : String = "For Url -> " + url + "\n";
-        for (i in 0..._parts.length)
+        for (i in 0...parts.length)
         {
-            s += _parts[i] + ": " + Reflect.field(this, _parts[i]) + (i==_parts.length-1?"":"\n");
+            s += parts[i] + ": " + Reflect.field(this, parts[i]) + (i==parts.length-1?"":"\n");
         }
         return s;
     }

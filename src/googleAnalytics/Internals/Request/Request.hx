@@ -158,7 +158,7 @@ class Request {
 			l.load(urlRequest);
 		#elseif js
 			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
-			var img:js.Dom.Image = cast js.Lib.document.createElement("img");
+			var img:js.html.Image = new js.html.Image();
 			img.src = url;
 		#else
 			var request : Http = new Http(url);

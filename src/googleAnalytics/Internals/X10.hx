@@ -25,7 +25,7 @@
  */
 
 package  googleAnalytics.internals;
-import haxe.BaseCode;
+import haxe.crypto.BaseCode;
 
 /**
  * This is nearly a 1:1 Haxe port of the gaforflash X10 class code.
@@ -37,7 +37,7 @@ import haxe.BaseCode;
 
 class X10 {
 	
-	private var projectData : Hash<Hash<Array<String>>>;
+	private var projectData : Map<String,Map<String,Array<String>>>;
 	private var KEY : String;
 	private var VALUE : String;
 	private var SET : Array<String>;
@@ -65,12 +65,12 @@ class X10 {
 	/**
 	 * Mapping of escapable characters to their escaped forms.
 	 */
-	private var ESCAPE_CHAR_MAP : Hash<String>;
+	private var ESCAPE_CHAR_MAP : Map<String,String>;
 	
 	private var MINIMUM : Int;
 	
 	public function new() {
-		projectData = new Hash<Hash<Array<String>>>();
+		projectData = new Map<String,Map<String,Array<String>>>();
 		KEY = 'k';
 		VALUE = 'v';
 		SET = [ 'k', 'v' ];
@@ -79,7 +79,7 @@ class X10 {
 		DELIM_SET = '*';
 		DELIM_NUM_VALUE = '!';
 		MINIMUM = 1;
-		ESCAPE_CHAR_MAP = new Hash<String>();
+		ESCAPE_CHAR_MAP = new Map<String,String>();
 		ESCAPE_CHAR_MAP.set('\'', '\'0');
 		ESCAPE_CHAR_MAP.set(')' , '\'1');
 		ESCAPE_CHAR_MAP.set('*' , '\'2');
@@ -126,7 +126,7 @@ class X10 {
 	 */
 	private function setInternal(projectId:String, type:String, num:Int, value:Dynamic) {
 		if(!projectData.exists(projectId)) {
-			projectData.set(projectId, new Hash<Array<String>>());
+			projectData.set(projectId, new Map<String,Array<String>>());
 		}
 		var p = projectData.get(projectId);
 		if(!p.exists(type)) {
@@ -140,7 +140,7 @@ class X10 {
 	 */
 	private function getInternal(projectId:String, type:String, num:Int) : Dynamic {
 		if (!projectData.exists(projectId)) return null;
-		var p : Hash<Array<String>> = projectData.get(projectId);
+		var p : Map<String,Array<String>> = projectData.get(projectId);
 		if (!p.exists(type)) return null;
 		var a : Array<String> = p.get(type);
 		if (a[num]==null) return null;
@@ -215,7 +215,7 @@ class X10 {
 	/**
 	 * Given a project array, render its string encoding.
 	 */
-	private function renderProject(project:Hash<Array<String>>) : String {
+	private function renderProject(project:Map<String,Array<String>>) : String {
 		var result = '';
 	
 		// Do we need to output the type string? As an optimization we do not
