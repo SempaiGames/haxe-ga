@@ -81,7 +81,8 @@ class EventRequest extends Request {
 		var eventFragment:String = x10.renderUrlString();
 		// Append only if not null to avoid "null" in event fragments
 		if (eventFragment != null) {
-			p.utme = eventFragment;
+			if(p.utme == null) p.utme = eventFragment;
+			else p.utme += eventFragment;
 		}
 		
 		if(this.event.getNoninteraction()) {
