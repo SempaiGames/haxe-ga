@@ -56,7 +56,8 @@ class PageviewRequest extends Request {
 		if(this.page.getLoadTime()!=0) {
 			// Sample sitespeed measurements
 			if(p.utmn % 100 < this.config.getSitespeedSampleRate()) {
-				p.utme += 0;
+				if(p.utme == null) p.utme = "" + 0;
+				else p.utme += 0;
 			}
 		}
 		
