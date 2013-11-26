@@ -149,10 +149,14 @@ class Request {
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
 		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
 		increaseTrackCount();
-		#if flash
+		#if (flash || openfl)
 			// we must load GoogleAnalytics using Flash API (like loading an image to avoid the check 
 			// of a crossdomain.xml
+			#if flash
 			var l : flash.display.Loader = new flash.display.Loader();
+			#elseif openfl
+			var l : flash.net.URLLoader = new flash.net.URLLoader();
+			#end
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
 			l.load(urlRequest);
