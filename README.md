@@ -33,8 +33,8 @@ Use Example:
 Disclaimer
 =======
 
-Google Analytics is a registered trademark of Google Inc.
-
+Google is a registered trademark of Google Inc.
+http://unibrander.com/united-states/140279US/google.html
 
 Licence
 =======
@@ -54,8 +54,9 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
   
-Google Analytics is a registered trademark of Google Inc.
-  
+Google is a registered trademark of Google Inc.
+
+
   WebSite: https://github.com/fbricker/haxe-ga
    Author: Federico Bricker
 copyright: Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
