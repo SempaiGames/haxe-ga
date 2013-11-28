@@ -149,7 +149,11 @@ class Request {
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
 		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
 		increaseTrackCount();
-		#if (flash || openfl)
+		#if js
+			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
+			var img:js.html.Image = new js.html.Image();
+			img.src = url;
+		#elseif (flash || openfl)
 			// we must load GoogleAnalytics using Flash API (like loading an image to avoid the check 
 			// of a crossdomain.xml
 			#if flash
@@ -160,10 +164,6 @@ class Request {
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
 			l.load(urlRequest);
-		#elseif js
-			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
-			var img:js.html.Image = new js.html.Image();
-			img.src = url;
 		#else
 			var request : Http = new Http(url);
 			if(userAgent!=null && userAgent!='') {

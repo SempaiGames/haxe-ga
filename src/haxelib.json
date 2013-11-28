@@ -5,6 +5,6 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.4.2",
-	"releasenote": "Added support for OpenFL (so it does not block the app on native requests)"
+	"version": "0.4.3",
+	"releasenote": "Fixed support for OpenFL when using html5 output."
 }
