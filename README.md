@@ -10,25 +10,33 @@ This project is a port of php-ga (http://code.google.com/p/php-ga/downloads/list
 Use Example:
 =======
 
-	var tracker = new googleAnalytics.Tracker('UA-27265081-3', 'testing.sempaigames.com');
+```haxe
+var tracker = new googleAnalytics.Tracker('UA-27265081-3', 'testing.sempaigames.com');
 
-	// (could also get unserialized from somewhere)
-	var visitor = new googleAnalytics.Visitor();
-	visitor.setUserAgent('haXe-ga');
-	visitor.setScreenResolution('1024x768');
-	visitor.setLocale('es_AR');
+// (could also get unserialized from somewhere)
+var visitor = new googleAnalytics.Visitor();
+visitor.setUserAgent('haXe-ga');
+visitor.setScreenResolution('1024x768');
+visitor.setLocale('es_AR');
 
-	var session = new googleAnalytics.Session();
+var session = new googleAnalytics.Session();
 
-	// Assemble Page information
-	var page = new googleAnalytics.Page('/page.html');
-	page.setTitle('My Page');
+// Assemble Page information
+var page = new googleAnalytics.Page('/page.html');
+page.setTitle('My Page');
 
-	// Track page view
-	tracker.trackPageview(page, session, visitor);
+// Track page view
+tracker.trackPageview(page, session, visitor);
 	
-	// DONE! =]
+// DONE! =]
+```
 
+How to Install:
+=======
+
+```bash
+haxelib install haxe-ga
+```
 
 Disclaimer
 =======
