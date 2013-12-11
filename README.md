@@ -7,28 +7,72 @@ Implementation of a generic server-side Google Analytics client in Haxe that imp
 
 This project is a port of php-ga (http://code.google.com/p/php-ga/downloads/list), developed by Thomas Bachem.
 
-Use Example:
+Simple use Example:
 =======
 
 ```haxe
-var tracker = new googleAnalytics.Tracker('UA-27265081-3', 'testing.sempaigames.com');
+// This example uses the Stats class. This class automatically creates and persists for you all google analytics required object.
+// It also creates a queue on native platforms so users will keep their statistics identities through different sessions.
 
-// (could also get unserialized from somewhere)
-var visitor = new googleAnalytics.Visitor();
-visitor.setUserAgent('haXe-ga');
-visitor.setScreenResolution('1024x768');
-visitor.setLocale('es_AR');
+import googleAnalytics.Stats;
 
-var session = new googleAnalytics.Session();
+class yourClass(){
+	function new(){
+		Stats.init('UA-27265081-3', 'testing.sempaigames.com');
+	}
 
-// Assemble Page information
-var page = new googleAnalytics.Page('/page.html');
-page.setTitle('My Page');
+	function trackStuff(){
+		// track some page views
+		Stats.trackPageview('/page.html','Page Title!');
+		Stats.trackPageview('/untitled.html');
 
-// Track page view
-tracker.trackPageview(page, session, visitor);
-	
-// DONE! =]
+		// track some events
+		Stats.trackEvent('play','stage-1/level-3','begin');
+		Stats.trackEvent('play','stage-2/level-4','win');
+	}
+}
+
+```
+
+Advanced use Example:
+=======
+
+```haxe
+// This example uses the original GoogleAnalytics classes.
+
+import googleAnalytics.Visitor;
+import googleAnalytics.Tracker;
+import googleAnalytics.Session;
+import googleAnalytics.Page;
+
+class yourClass{
+
+	private var tracker:Tracker;
+	private var visitor:Visitor;
+	private var session:Session;
+
+	function new(){
+		tracker = new Tracker('UA-27265081-3', 'testing.sempaigames.com');
+
+		// (could also get unserialized from somewhere)
+		visitor = new Visitor();
+		visitor.setUserAgent('haXe-ga');
+		visitor.setScreenResolution('1024x768');
+		visitor.setLocale('es_AR');
+
+		session = new Session();
+	}
+
+	function trackPageview(){	
+		// Assemble Page information
+		var page = new googleAnalytics.Page('/page.html');
+		page.setTitle('My Page');
+
+		// Track page view
+		tracker.trackPageview(page, session, visitor);
+	}
+}
+
 ```
 
 How to Install:

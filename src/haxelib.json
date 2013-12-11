@@ -5,6 +5,6 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.4.4",
-	"releasenote": "Fix package names for case-sensitive platforms"
+	"version": "0.4.5",
+	"releasenote": "Added Stats class to make this library easier to use"
 }
