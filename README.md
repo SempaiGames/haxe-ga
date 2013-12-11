@@ -16,7 +16,7 @@ Simple use Example:
 
 import googleAnalytics.Stats;
 
-class yourClass(){
+class SimpleExample {
 	function new(){
 		Stats.init('UA-27265081-3', 'testing.sempaigames.com');
 	}
@@ -45,7 +45,7 @@ import googleAnalytics.Tracker;
 import googleAnalytics.Session;
 import googleAnalytics.Page;
 
-class yourClass{
+class AdvancedExample {
 
 	private var tracker:Tracker;
 	private var visitor:Visitor;
