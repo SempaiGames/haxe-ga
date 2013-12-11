@@ -11,8 +11,11 @@ Simple use Example:
 =======
 
 ```haxe
-// This example uses the Stats class. This class automatically creates and persists for you all google analytics required object.
-// It also creates a queue on native platforms so users will keep their statistics identities through different sessions.
+// This example uses the Stats class. This class automatically creates and persists for
+// you all google analytics required objects so users will keep their statistics identities
+// through different sessions.
+// It also creates a queue on native platforms (CPP) so tracking will goes on a separate
+// thread to avoid slowing down the main Thread while tracking.
 
 import googleAnalytics.Stats;
 
