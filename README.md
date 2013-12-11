@@ -112,6 +112,4 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA.
 Google is a registered trademark of Google Inc.
 
 
-  WebSite: https://github.com/fbricker/haxe-ga
-   Author: Federico Bricker
-copyright: Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
+WebSite: https://github.com/fbricker/haxe-ga | Author: Federico Bricker | Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
