@@ -68,8 +68,8 @@ class Stats {
 			cpp.vm.Thread.readMessage(true);
 			working=true;
 			while(requests.length>0){
-				requests.shift().track(tracker,visitor,session);
 				Sys.sleep(0.1);
+				requests.shift().track(tracker,visitor,session);
 			}
 			Stats.persistVisitor();
 			working=false;
