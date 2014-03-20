@@ -3,6 +3,7 @@ package googleAnalytics;
 #if (flash || openfl)
 import flash.net.SharedObject;
 import flash.system.Capabilities;
+import flash.Lib;
 #end
 
 class Stats {
@@ -78,35 +79,42 @@ class Stats {
 	#end
 	
 	private static function loadVisitor(){
+		var version:String=" [haxe]";
+		visitor = new Visitor();
 		#if (flash || openfl)
 		var ld:SharedObject=SharedObject.getLocal('gaVisitor');
-		if(ld.data==null || ld.data.gaVisitor==null){
-		#end
-			visitor = new Visitor();
-			#if ios
-			visitor.setUserAgent('iOS');
-			#elseif html5
-			visitor.setUserAgent('html5');
-			#elseif android
-			visitor.setUserAgent('android');
-			#elseif mac
-			visitor.setUserAgent('OS X');
-			#elseif tizen
-			visitor.setUserAgent("tizen");
-			#else
-			visitor.setUserAgent('-not-set-');
-			#end
-			#if (flash || openfl)
-			visitor.setScreenResolution(''+Capabilities.screenResolutionX+'x'+Capabilities.screenResolutionY);
-			visitor.setLocale(Capabilities.language);
-			#else
-			visitor.setScreenResolution('1024x768');
-			visitor.setLocale('en_US');
-			#end
-		#if (flash || openfl)
-		}else{
+		if(ld.data!=null && ld.data.gaVisitor!=null){
 			visitor=ld.data.gaVisitor;
 		}
+		version+="/" + Lib.packageName + "." + Lib.version;
+		#end
+
+		#if ios
+		visitor.setUserAgent('iOS'+version);
+		#elseif html5
+		visitor.setUserAgent('HTML5'+version);
+		#elseif android
+		visitor.setUserAgent('Android'+version);
+		#elseif mac
+		visitor.setUserAgent('OS-X'+version);
+		#elseif tizen
+		visitor.setUserAgent("Tizen"+version);
+		#elseif blackberry
+		visitor.setUserAgent("BlackBerry"+version);
+		#elseif windows
+		visitor.setUserAgent("Windows"+version);
+		#elseif linux
+		visitor.setUserAgent("Linux"+version);
+		#else
+		visitor.setUserAgent('-not-set-'+version);
+		#end
+
+		#if (flash || openfl)
+		visitor.setScreenResolution(''+Capabilities.screenResolutionX+'x'+Capabilities.screenResolutionY);
+		visitor.setLocale(Capabilities.language);
+		#else
+		visitor.setScreenResolution('1024x768');
+		visitor.setLocale('en_US');
 		#end
 
 		visitor.getUniqueId();
