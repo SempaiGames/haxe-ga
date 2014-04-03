@@ -163,7 +163,9 @@ class Request {
 			#end
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
+			#if !flash
 			urlRequest.requestHeaders.push(new flash.net.URLRequestHeader('User-Agent', userAgent));
+			#end
 			l.load(urlRequest);
 		#else
 			var request : Http = new Http(url);

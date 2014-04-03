@@ -86,6 +86,8 @@ class Stats {
 		if(ld.data!=null && ld.data.gaVisitor!=null){
 			visitor=ld.data.gaVisitor;
 		}
+		#end
+		#if (openfl && !flash)
 		version+="/" + Lib.packageName + "." + Lib.version;
 		#end
 
