@@ -87,14 +87,12 @@ class Stats {
 			visitor=ld.data.gaVisitor;
 		}
 		#end
-		#if (openfl && !flash)
+		#if (openfl && !flash && !html5)
 		version+="/" + Lib.packageName + "." + Lib.version;
 		#end
 
 		#if ios
 		visitor.setUserAgent('iOS'+version);
-		#elseif html5
-		visitor.setUserAgent('HTML5'+version);
 		#elseif android
 		visitor.setUserAgent('Android'+version);
 		#elseif mac
