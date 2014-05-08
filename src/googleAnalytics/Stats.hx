@@ -4,6 +4,8 @@ package googleAnalytics;
 import flash.net.SharedObject;
 import flash.system.Capabilities;
 import flash.Lib;
+import haxe.Unserializer;
+import haxe.Serializer;
 #end
 
 class Stats {
@@ -82,9 +84,13 @@ class Stats {
 		var version:String=" [haxe]";
 		visitor = new Visitor();
 		#if (flash || openfl)
-		var ld:SharedObject=SharedObject.getLocal('gaVisitor');
+		var ld:SharedObject=SharedObject.getLocal('ga-visitor');
 		if(ld.data!=null && ld.data.gaVisitor!=null){
-			visitor=ld.data.gaVisitor;
+			try{
+				visitor=Unserializer.run(ld.data.gaVisitor);
+			}catch(e:Dynamic){
+				visitor = new Visitor();
+			}
 		}
 		#end
 		#if (openfl && !flash && !html5)
@@ -124,8 +130,11 @@ class Stats {
 
 	private static function persistVisitor(){
 		#if (flash || openfl)
-		var ld=SharedObject.getLocal('gaVisitor');
-		ld.data.gaVisitor=visitor;
+		var ld=SharedObject.getLocal('ga-visitor');
+		var oldSerializerValue = Serializer.USE_CACHE;
+		Serializer.USE_CACHE = true;
+		ld.data.gaVisitor = Serializer.run(visitor);
+		Serializer.USE_CACHE = oldSerializerValue;
 		try{
 			ld.flush();
 		}catch( e:Dynamic ){

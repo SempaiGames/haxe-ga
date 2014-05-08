@@ -166,7 +166,7 @@ class Request {
 			#if !flash
 			urlRequest.requestHeaders.push(new flash.net.URLRequestHeader('User-Agent', userAgent));
 			#end
-			l.load(urlRequest);
+			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#else
 			var request : Http = new Http(url);
 			if(userAgent!=null && userAgent!='') {

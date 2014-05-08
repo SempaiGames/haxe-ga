@@ -5,6 +5,6 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.4.9",
-	"releasenote": "Removed HTML5 user-agent to stay compatible with all OpenFL Outputs"
+	"version": "0.4.10",
+	"releasenote": "Fix visitor object persitance on Flash"
 }
