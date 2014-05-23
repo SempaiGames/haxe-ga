@@ -153,19 +153,12 @@ class Request {
 			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
 			var img:js.html.Image = new js.html.Image();
 			img.src = url;
-		#elseif (flash || openfl)
+		#elseif flash
 			// we must load GoogleAnalytics using Flash API (like loading an image to avoid the check 
 			// of a crossdomain.xml
-			#if flash
 			var l : flash.display.Loader = new flash.display.Loader();
-			#elseif openfl
-			var l : flash.net.URLLoader = new flash.net.URLLoader();
-			#end
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
-			#if !flash
-			urlRequest.requestHeaders.push(new flash.net.URLRequestHeader('User-Agent', userAgent));
-			#end
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#else
 			var request : Http = new Http(url);

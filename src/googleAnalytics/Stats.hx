@@ -14,7 +14,7 @@ class Stats {
 	private static var cache:Map<String,GATrackObject>=null;
 	private static var visitor:Visitor=null;
 	private static var session:Session=null;
-	#if native
+	#if cpp
 	private static var working:Bool=false;
 	private static var thread:cpp.vm.Thread;
 	private static var requests:Array<GATrackObject>;
@@ -31,7 +31,7 @@ class Stats {
 		cache = new Map<String,GATrackObject>();
 		session = new Session();
 		loadVisitor();
-		#if native
+		#if cpp
 		requests = new Array<GATrackObject>();
 		thread = cpp.vm.Thread.create(onThreadMessage);
 		#end
@@ -56,7 +56,7 @@ class Stats {
 	}
 
 	private static function track(hash:String){
-		#if !native
+		#if !cpp
 			cache.get(hash).track(tracker,visitor,session);
 			Stats.persistVisitor();
 		#else
@@ -65,14 +65,15 @@ class Stats {
 		#end
 	}
 
-	#if native
+	#if cpp
 	private static function onThreadMessage(){
 		while(true){
 			cpp.vm.Thread.readMessage(true);
 			working=true;
 			while(requests.length>0){
-				Sys.sleep(0.1);
+				Sys.sleep(0.5);
 				requests.shift().track(tracker,visitor,session);
+				Sys.sleep(2);
 			}
 			Stats.persistVisitor();
 			working=false;
