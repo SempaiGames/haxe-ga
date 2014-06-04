@@ -113,7 +113,9 @@ class Request {
 	}
 
 	public function onError (e:String) {
+		#if !silentRequest
 		trace('ERROR: '+e);
+		#end
 	}
 
 	private function increaseTrackCount() {
@@ -159,6 +161,10 @@ class Request {
 			var l : flash.display.Loader = new flash.display.Loader();
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
+			
+			//flash have unspoken error that can happen nonetheless due to denied DNS resolution...
+			l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, function(e:flash.events.IOErrorEvent) onError(e.text) );
+			
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#else
 			var request : Http = new Http(url);
