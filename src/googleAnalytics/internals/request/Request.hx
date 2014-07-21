@@ -112,9 +112,7 @@ class Request {
 		this.session = session;
 	}
 
-	public function onError (e:String) {
-		trace('ERROR: '+e);
-	}
+	private static function onError (_) {}
 
 	private function increaseTrackCount() {
 		// Increment session track counter for each request
@@ -128,7 +126,6 @@ class Request {
 			this.tracker.getCampaign().increaseResponseCount();
 		}
 	}
-	
 	
 	/**
 	 * This method should only be called directly or indirectly by fire(), but must
@@ -159,6 +156,8 @@ class Request {
 			var l : flash.display.Loader = new flash.display.Loader();
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
+			//flash have unspoken error that can happen nonetheless due to denied DNS resolution...
+			l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#else
 			var request : Http = new Http(url);
