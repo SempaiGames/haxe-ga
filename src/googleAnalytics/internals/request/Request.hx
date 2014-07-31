@@ -164,7 +164,7 @@ class Request {
 			if(userAgent!=null && userAgent!='') {
 				request.setHeader('User-Agent', userAgent);
 			}
-			request.setHeader('Host', config.getUrlScheme() + config.getEndPointHost());
+			request.setHeader('Host', config.getUrlScheme() + '://' + config.getEndPointHost());
 			request.setHeader('Connection', 'close');
 			#if (neko||php||cpp||cs||java)
 				request.cnxTimeout=config.getRequestTimeout();
