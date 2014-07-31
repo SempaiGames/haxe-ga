@@ -144,7 +144,7 @@ class Request {
 			parameters.utmvid = visitor.getUniqueId();
 		}
 		var queryString : String = Util.convertToUriComponentEncoding(parameters.toQueryString());
-		var url : String = 'http://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
+		var url : String = config.getUrlScheme() + '://' + config.getEndPointHost() + config.getEndPointPath() + '?' + queryString;
 		increaseTrackCount();
 		#if js
 			// well, in javascript ocurrs the same thing with CORS, so no request, just load an image.
@@ -164,8 +164,8 @@ class Request {
 			if(userAgent!=null && userAgent!='') {
 				request.setHeader('User-Agent', userAgent);
 			}
-			request.setHeader('Host', 'http://'+config.getEndPointHost());
-			request.setHeader('Connection', 'close');		
+			request.setHeader('Host', config.getUrlScheme() + config.getEndPointHost());
+			request.setHeader('Connection', 'close');
 			#if (neko||php||cpp||cs||java)
 				request.cnxTimeout=config.getRequestTimeout();
 			#end

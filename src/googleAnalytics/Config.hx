@@ -92,6 +92,11 @@ class Config {
 	// FIXME: Add SSL support, https://ssl.google-analytics.com
 	
 	/**
+	 * Setting this to 'https' allows analytics to be sent over SSL.
+	 */
+	private var urlScheme : String = 'http';
+	
+	/**
 	 * Google Analytics tracking request endpoint host. Can be set to null to
 	 * silently simulate (and log) requests without actually sending them.
 	 * @see internals.request.HttpRequest::send()
@@ -113,7 +118,8 @@ class Config {
 	 */
 	private var sitespeedSampleRate : Int = 1;
 		
-	public function new() {
+	public function new(useSSL:Bool = false) {
+		setUrlScheme('http' + (useSSL ? 's' : ''));
 		/*for(property => value in properties) {
 			// PHP doesn't care about case in method names
 			setterMethod = 'set' + property;
@@ -170,6 +176,14 @@ class Config {
 	
 	public function setRequestTimeout(requestTimeout:Float) {
 		this.requestTimeout = requestTimeout;
+	}
+	
+	public function getUrlScheme() : String {
+		return this.urlScheme;
+	}
+	
+	public function setUrlScheme(urlScheme:String) : String {
+		return this.urlScheme = urlScheme;
 	}
 	
 	public function getEndPointHost() : String {
