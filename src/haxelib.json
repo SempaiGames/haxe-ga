@@ -5,6 +5,6 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.4.14",
-	"releasenote": "Added support for tracking events over SSL"
+	"version": "0.4.15",
+	"releasenote": "Avoid crash on BlackBerry devices by using openfl's URLLoader instad of Haxe HTTP only for BlackBerry"
 }

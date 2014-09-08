@@ -159,6 +159,12 @@ class Request {
 			//flash have unspoken error that can happen nonetheless due to denied DNS resolution...
 			l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
+		#elseif blackberry  // On BlackBerry we must use URLLoader to avoid AppCrash.
+			var l : flash.net.URLLoader = new flash.net.URLLoader();
+			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
+			urlRequest.url=url;
+			urlRequest.requestHeaders.push(new flash.net.URLRequestHeader('User-Agent', userAgent));
+			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#else
 			var request : Http = new Http(url);
 			if(userAgent!=null && userAgent!='') {
