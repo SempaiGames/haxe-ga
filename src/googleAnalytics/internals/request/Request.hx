@@ -37,6 +37,24 @@ import googleAnalytics.internals.ParameterHolder;
 import googleAnalytics.internals.Util;
 import googleAnalytics.internals.X10;
 
+#if blackberry
+class BBURLLoader extends flash.net.URLLoader{
+
+	override public function load (request:flash.net.URLRequest):Void {
+		state = flash.net.URLLoader.urlInit;
+		request.__prepare ();
+		__handle = flash.net.URLLoader.lime_curl_create (request);
+			
+		if (__handle == null) {			
+			onError ("Could not open URL");
+		} else {
+			Sys.sleep(1);
+			this.update();
+		}
+	}
+}
+#end
+
 
 class Request {
 
@@ -160,7 +178,7 @@ class Request {
 			l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
 		#elseif blackberry  // On BlackBerry we must use URLLoader to avoid AppCrash.
-			var l : flash.net.URLLoader = new flash.net.URLLoader();
+			var l : flash.net.URLLoader = new BBURLLoader();
 			var urlRequest : flash.net.URLRequest=new flash.net.URLRequest();
 			urlRequest.url=url;
 			urlRequest.requestHeaders.push(new flash.net.URLRequestHeader('User-Agent', userAgent));
