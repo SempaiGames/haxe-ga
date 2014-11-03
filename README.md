@@ -91,7 +91,7 @@ Disclaimer
 Google is a registered trademark of Google Inc.
 http://unibrander.com/united-states/140279US/google.html
 
-Licence
+License
 =======
 http://www.gnu.org/licenses/lgpl.html
 
