@@ -7,16 +7,22 @@ import flash.Lib;
 import haxe.Unserializer;
 import haxe.Serializer;
 #end
+#if cpp
+import cpp.vm.Thread;
+#elseif neko
+import neko.vm.Thread;
+#end
 
 class Stats {
 
+	private static var paused:Bool=false;
 	private static var tracker:Tracker=null;
 	private static var cache:Map<String,GATrackObject>=null;
 	private static var visitor:Visitor=null;
 	private static var session:Session=null;
-	#if cpp
+	#if ( cpp || neko )
 	private static var working:Bool=false;
-	private static var thread:cpp.vm.Thread;
+	private static var thread:Thread;
 	private static var requests:Array<GATrackObject>;
 	#end
 	
@@ -31,9 +37,9 @@ class Stats {
 		cache = new Map<String,GATrackObject>();
 		session = new Session();
 		loadVisitor();
-		#if cpp
+		#if ( cpp || neko )
 		requests = new Array<GATrackObject>();
-		thread = cpp.vm.Thread.create(onThreadMessage);
+		thread = Thread.create(onThreadMessage);
 		#end
 	}
 	
@@ -56,22 +62,36 @@ class Stats {
 	}
 
 	private static function track(hash:String){
-		#if !cpp
+		#if ( cpp || neko )
+			requests.push(cache.get(hash));
+			if(!working) thread.sendMessage(null);
+		#else
+			if(paused) return;
 			cache.get(hash).track(tracker,visitor,session);
 			Stats.persistVisitor();
-		#else
-			requests.push(cache.get(hash));
+		#end
+	}
+
+	public static function pause(){
+		paused = true;
+	}
+
+	public static function resume(){
+		paused = false;
+		#if (cpp || neko)
 			if(!working) thread.sendMessage(null);
 		#end
 	}
 
-	#if cpp
+	#if ( cpp || neko )
 	private static function onThreadMessage(){
 		while(true){
-			cpp.vm.Thread.readMessage(true);
+			Thread.readMessage(true);
+			if(paused) continue;
 			working=true;
 			while(requests.length>0){
 				Sys.sleep(0.5);
+				if(paused) break;
 				requests.shift().track(tracker,visitor,session);
 				Sys.sleep(2);
 			}
