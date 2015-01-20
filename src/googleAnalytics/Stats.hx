@@ -21,7 +21,6 @@ class Stats {
 	private static var visitor:Visitor=null;
 	private static var session:Session=null;
 	#if ( cpp || neko )
-	private static var working:Bool=false;
 	private static var thread:Thread;
 	private static var requests:Array<GATrackObject>;
 	#end
@@ -63,8 +62,7 @@ class Stats {
 
 	private static function track(hash:String){
 		#if ( cpp || neko )
-			requests.push(cache.get(hash));
-			if(!working) thread.sendMessage(null);
+			thread.sendMessage(cache.get(hash));
 		#else
 			if(paused) return;
 			cache.get(hash).track(tracker,visitor,session);
@@ -79,24 +77,23 @@ class Stats {
 	public static function resume(){
 		paused = false;
 		#if (cpp || neko)
-			if(!working) thread.sendMessage(null);
+			thread.sendMessage(null);
 		#end
 	}
 
 	#if ( cpp || neko )
 	private static function onThreadMessage(){
 		while(true){
-			Thread.readMessage(true);
+			var msg:GATrackObject = Thread.readMessage(true);
+			if(msg!=null) requests.push(msg);
 			if(paused) continue;
-			working=true;
-			while(requests.length>0){
+			if(requests.length>0){
 				Sys.sleep(0.5);
 				if(paused) break;
 				requests.shift().track(tracker,visitor,session);
 				Sys.sleep(2);
 			}
 			Stats.persistVisitor();
-			working=false;
 		}	
 	}
 	#end
