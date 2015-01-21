@@ -1,7 +1,7 @@
 package googleAnalytics;
 
-import extension.locale.Locale;
 #if (flash || openfl)
+import extension.locale.Locale;
 import flash.net.SharedObject;
 import flash.system.Capabilities;
 import flash.Lib;
