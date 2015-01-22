@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension>
+	<section if="openfl || flash">
+		<haxelib name="openfl-locale" /> 
+	</section>
+</extension>
