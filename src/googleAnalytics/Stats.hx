@@ -29,11 +29,11 @@ class Stats {
 	private static var accountId:String=null;
 	private static var domainName:String=null;
 	
-	public static function init(accountId:String,domainName:String){
+	public static function init(accountId:String,domainName:String,useSSL:Bool=false){
 		if(Stats.accountId!=null) return;
 		Stats.accountId=accountId;
 		Stats.domainName=domainName;
-		tracker = new Tracker(accountId,domainName);
+		tracker = new Tracker(accountId,domainName,new Config(useSSL));
 		cache = new Map<String,GATrackObject>();
 		session = new Session();
 		loadVisitor();
