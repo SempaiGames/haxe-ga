@@ -22,6 +22,7 @@ import googleAnalytics.Stats;
 class SimpleExample {
 	function new(){
 		Stats.init('UA-27265081-3', 'testing.sempaigames.com');
+		// Stats.init('UA-27265081-3', 'testing.sempaigames.com', true); /* in case you want to use SSL connections */
 	}
 
 	function trackStuff(){
