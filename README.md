@@ -94,7 +94,7 @@ http://unibrander.com/united-states/140279US/google.html
 
 License
 =======
-The MIT License ([MIT](LICENSE.md))
+The MIT License (MIT) - [LICENSE.md](LICENSE.md))
 
 Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
 
