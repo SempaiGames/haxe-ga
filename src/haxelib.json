@@ -1,7 +1,7 @@
 {
 	"name": "haxe-ga",
 	"url": "https://github.com/fbricker/haxe-ga",
-	"license": "GPL",
+	"license": "MIT",
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
