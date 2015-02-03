@@ -1,5 +1,4 @@
-haxe-ga
-=======
+#haxe-ga
 
 GoogleAnalytics Client API port to Haxe
 
@@ -7,8 +6,7 @@ Implementation of a generic server-side Google Analytics client in Haxe that imp
 
 This project is a port of php-ga (http://code.google.com/p/php-ga/downloads/list), developed by Thomas Bachem.
 
-Simple use Example:
-=======
+###Simple use Example:
 
 ```haxe
 // This example uses the Stats class. This class automatically creates and persists for
@@ -38,8 +36,7 @@ class SimpleExample {
 
 ```
 
-Advanced use Example:
-=======
+###Advanced use Example:
 
 ```haxe
 // This example uses the original GoogleAnalytics classes.
@@ -79,23 +76,21 @@ class AdvancedExample {
 
 ```
 
-How to Install:
-=======
+###How to Install:
 
 ```bash
 haxelib install haxe-ga
 ```
 
-Disclaimer
-=======
+###Disclaimer
 
 Google is a registered trademark of Google Inc.
 http://unibrander.com/united-states/140279US/google.html
 
-License
-=======
+###License
+
 The MIT License (MIT) - [LICENSE.md](LICENSE.md)
 
-Copyright (c) 2012 SempaiGames (http://www.sempaigames.com)
+Copyright &copy; 2012 SempaiGames (http://www.sempaigames.com)
 
 Author: Federico Bricker
