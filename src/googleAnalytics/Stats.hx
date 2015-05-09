@@ -8,26 +8,16 @@ import flash.Lib;
 import haxe.Unserializer;
 import haxe.Serializer;
 #end
-#if cpp
-import cpp.vm.Thread;
-#elseif neko
-import neko.vm.Thread;
-#end
 
 class Stats {
 
-	private static var paused:Bool=false;
-	private static var tracker:Tracker=null;
-	private static var cache:Map<String,GATrackObject>=null;
-	private static var visitor:Visitor=null;
-	private static var session:Session=null;
-	#if ( cpp || neko )
-	private static var thread:Thread;
-	private static var requests:Array<GATrackObject>;
-	#end
-	
 	private static var accountId:String=null;
+	private static var cache:Map<String,GATrackObject>=null;
 	private static var domainName:String=null;
+	private static var paused:Bool=false;
+	private static var session:Session=null;
+	private static var tracker:Tracker=null;
+	private static var visitor:Visitor=null;
 	
 	public static function init(accountId:String,domainName:String,useSSL:Bool=false){
 		if(Stats.accountId!=null) return;
@@ -37,10 +27,6 @@ class Stats {
 		cache = new Map<String,GATrackObject>();
 		session = new Session();
 		loadVisitor();
-		#if ( cpp || neko )
-		requests = new Array<GATrackObject>();
-		thread = Thread.create(onThreadMessage);
-		#end
 	}
 	
 	public static function trackPageview(path:String,title:String=null){
@@ -62,43 +48,19 @@ class Stats {
 	}
 
 	private static function track(hash:String){
-		#if ( cpp || neko )
-			thread.sendMessage(cache.get(hash));
-		#else
-			if(paused) return;
-			cache.get(hash).track(tracker,visitor,session);
-			Stats.persistVisitor();
-		#end
+		if(paused) return;
+		cache.get(hash).track(tracker,visitor,session);
+		Stats.persistVisitor();
 	}
 
-	public static function pause(){
+	public static function pause() {
 		paused = true;
 	}
 
-	public static function resume(){
+	public static function resume() {
 		paused = false;
-		#if (cpp || neko)
-			thread.sendMessage(null);
-		#end
 	}
 
-	#if ( cpp || neko )
-	private static function onThreadMessage(){
-		while(true){
-			var msg:GATrackObject = Thread.readMessage(true);
-			if(msg!=null) requests.push(msg);
-			if(paused) continue;
-			if(requests.length>0){
-				Sys.sleep(0.5);
-				if(paused) break;
-				requests.shift().track(tracker,visitor,session);
-				Sys.sleep(2);
-			}
-			Stats.persistVisitor();
-		}	
-	}
-	#end
-	
 	private static function loadVisitor(){
 		var version:String=" [haxe]";
 		visitor = new Visitor();

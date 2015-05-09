@@ -5,9 +5,9 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.4.20",
+	"version": "0.4.21",
 	"dependencies": {
         "openfl-locale": ""
     },
-	"releasenote": "Easy way to add SSL support on Stats class."
+	"releasenote": "Add threaded socket request class for CPP and Neko (avoids blocking during DNS resolution)."
 }
