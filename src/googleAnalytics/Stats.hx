@@ -112,10 +112,10 @@ class Stats {
 			}
 		}
 		#end
-		// There is no packageName info in OpenFL 3 at the moment
-		// #if (openfl && !flash && !html5)
-		// version+="/" + Lib.packageName + "." + Lib.version;
-		// #end
+		
+		#if (openfl && !flash && !html5 && !openfl-next)
+		version+="/" + Lib.packageName + "." + Lib.version;
+		#end
 
 		#if ios
 		visitor.setUserAgent('iOS'+version);
