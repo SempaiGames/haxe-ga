@@ -74,7 +74,8 @@ class Stats {
 			}
 		}
 		#end
-		#if (openfl && !flash && !html5)
+		
+		#if (openfl && !flash && !html5 && !openfl-next)
 		version+="/" + Lib.packageName + "." + Lib.version;
 		#end
 
