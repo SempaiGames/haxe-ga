@@ -6,6 +6,8 @@ Implementation of a generic server-side Google Analytics client in Haxe that imp
 
 This project is a port of php-ga (http://code.google.com/p/php-ga/downloads/list), developed by Thomas Bachem.
 
+*Note that until Android and iOS native SDK gets integrated on this package, this project needs you to provide an ID of a Website to work propperly.*
+
 ###Simple use Example:
 
 ```haxe
