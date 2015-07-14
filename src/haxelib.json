@@ -1,6 +1,6 @@
 {
 	"name": "haxe-ga",
-	"url": "https://github.com/fbricker/haxe-ga",
+	"url": "https://github.com/sempaigames/haxe-ga",
 	"license": "MIT",
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
