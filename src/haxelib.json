@@ -5,7 +5,7 @@
 	"contributors":["fbricker"],
 	"tags": ["cross","api","google","analytics"],
 	"description": "Generic Google Analytics client that implements nearly every parameter and tracking feature of the original GA Javascript client.",
-	"version": "0.5.1",
+	"version": "0.5.2",
 	"dependencies": {"extension-locale": ""},
-	"releasenote": "Use extension-locale instead of the deprecated openfl-locale."
+	"releasenote": "Re-enable SSL support for CPP and Neko."
 }

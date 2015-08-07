@@ -55,6 +55,10 @@ class Main {
 		// Track page view
 		tracker.trackPageview(page, session, visitor);
 		trace(tracker);
+
+		#if (cpp || neko)
+		Sys.sleep(10);
+		#end
 	}
 	
 }

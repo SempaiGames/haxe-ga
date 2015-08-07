@@ -158,21 +158,31 @@ class Request {
 			//flash have unspoken error that can happen nonetheless due to denied DNS resolution...
 			l.contentLoaderInfo.addEventListener( flash.events.IOErrorEvent.IO_ERROR, onError );
 			try{ l.load(urlRequest); }catch(e:Dynamic){}
-		#elseif (cpp || neko) 
-			// On CPP and Neko, we must use ThreadedSocketRequest to avoid blocking.
-			googleAnalytics.ThreadedSocketRequest.request(url,userAgent);
 		#else
-			var request : Http = new Http(url);
-			if(userAgent!=null && userAgent!='') {
-				request.setHeader('User-Agent', userAgent);
-			}
-			request.setHeader('Host', config.getUrlScheme() + '://' + config.getEndPointHost());
-			request.setHeader('Connection', 'close');
-			#if (neko||php||cpp||cs||java)
-				request.cnxTimeout=config.getRequestTimeout();
+
+			#if (cpp || neko) 
+				// On CPP and Neko, we must use ThreadedSocketRequest to avoid blocking.
+				// But, since ThreadedSocketRequest does not support https, we may not use it.
+				var useThreadedSocketRequest:Bool = config.getUrlScheme()=='http';
+			#else
+				var useThreadedSocketRequest:Bool = false;
 			#end
-			request.onError = onError;
-			request.request(false);
+
+			if(useThreadedSocketRequest){
+				googleAnalytics.ThreadedSocketRequest.request(url,userAgent);
+			} else {
+				var request : Http = new Http(url);
+				if(userAgent!=null && userAgent!='') {
+					request.setHeader('User-Agent', userAgent);
+				}
+				request.setHeader('Host', config.getUrlScheme() + '://' + config.getEndPointHost());
+				request.setHeader('Connection', 'close');
+				#if (neko||php||cpp||cs||java)
+					request.cnxTimeout=config.getRequestTimeout();
+				#end
+				request.onError = onError;
+				request.request(false);				
+			}
 		#end
 	}
 	

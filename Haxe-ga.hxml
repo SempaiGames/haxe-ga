@@ -1,7 +1,7 @@
-#-swf9 bin/Haxega.swf
+#-swf bin/Haxega.swf
 -js bin/Haxega.js
 #-php bin/php
-#-cpp bin/cpp.exe
+#-cpp bin/cpp
 #-lib haxe-ga
 -cp src
 -main Main
