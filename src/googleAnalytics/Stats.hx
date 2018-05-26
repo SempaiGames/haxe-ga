@@ -135,7 +135,6 @@ class Stats {
 
 		visitor.getUniqueId();
 		visitor.addSession(session);
-		trace(visitor);
 		Stats.persistVisitor();
 	}
 
@@ -153,7 +152,7 @@ class Stats {
 			Serializer.USE_CACHE = true;
 			var data = Serializer.run(visitor);
 			Serializer.USE_CACHE = old_USE_CACHE;
-			js.Cookie.set('MUSES_TRACKING',data);
+			js.Cookie.set('MUSES_TRACKING',data,3600*24*365);
 		#end
 		}catch( e:Dynamic ){
 			trace("Error while saving Google Analytics Visitor!");
