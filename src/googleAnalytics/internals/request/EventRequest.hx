@@ -74,7 +74,7 @@ class EventRequest extends Request {
 			x10.setKey(/*self.*/X10_EVENT_PROJECT_ID, X10.LABEL_KEY_NUM, this.event.getLabel());
 		}
 		
-		if(this.event.getValue() != 0) {
+		if(this.event.getValue() >= 0) {
 			x10.setValue(/*self.*/X10_EVENT_PROJECT_ID, X10.VALUE_VALUE_NUM, this.event.getValue());
 		}
 		
